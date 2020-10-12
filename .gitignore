@@ -1,5 +1,6 @@
 # IDE stuff
 .idea/
 .target/
+.build/
 practicalTask.iml
 

@@ -1,5 +1,6 @@
 package practicalTask.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.validator.constraints.Length;
 import practicalTask.controllers.OrganizationController;
 import practicalTask.utils.ArgChecker;
@@ -33,6 +34,7 @@ public class Organization {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotNull
     @Version
     private Long version;
 
@@ -61,6 +63,7 @@ public class Organization {
 
     private boolean isActive;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "organization")

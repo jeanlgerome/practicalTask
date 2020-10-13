@@ -20,6 +20,7 @@ public class Office {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotNull
     @Version
     private Long version;
 

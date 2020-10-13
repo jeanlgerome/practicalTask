@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import practicalTask.domain.Organization;
 import practicalTask.service.organization.OrganizationService;
+import practicalTask.utils.response.DataContainer;
 import practicalTask.utils.response.ResultContainer;
 
 import javax.validation.constraints.NotBlank;
@@ -35,10 +36,9 @@ public class OrganizationController {
      * @see ExceptionInterceptor
      */
     @RequestMapping(method = RequestMethod.GET, value = "/api/organization/{id}")
-    public @ResponseBody
-    ResponseEntity getOrganization(@PathVariable @NotNull final Long id) {
+    public ResponseEntity getOrganization(@PathVariable @NotNull final Long id) {
         Organization organization = organizationService.getOrganization(id);
-        return ResponseEntity.status(HttpStatus.OK).body(new ResultContainer.DataContainer(organization));
+        return ResponseEntity.status(HttpStatus.OK).body( new DataContainer(organization));
     }
 
     /**
@@ -57,7 +57,7 @@ public class OrganizationController {
                                               @RequestParam(required = false, defaultValue = "true") boolean isActive) {
 
         List<Organization> organizationList = organizationService.getOrganizationList(name, inn, isActive);
-        return ResponseEntity.status(HttpStatus.OK).body(new ResultContainer.DataContainer(organizationList));
+        return ResponseEntity.status(HttpStatus.OK).body(new DataContainer(organizationList));
     }
 
     /**

@@ -12,17 +12,5 @@ public class ResultContainer {
         return result;
     }
 
-    public static class DataContainer {
 
-        private final Object data;
-
-        public DataContainer(Object data) {
-            this.data = data;
-        }
-
-        public Object getData() {
-            return data;
-        }
-
-    }
 }

@@ -13,8 +13,6 @@ import java.time.LocalDate;
         @Index(name = "IX_usr_secondName", columnList = "secondName"),
         @Index(name = "IX_usr_middleName", columnList = "middleName"),
         @Index(name = "IX_usr_position", columnList = "position"),
-        @Index(name = "UX_usr_docNumber", columnList = "docNumber", unique = true),
-        @Index(name = "IX_usr_citizenshipCode", columnList = "citizenshipCode")
 })
 public class User {
 
@@ -22,6 +20,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotNull
     @Version
     private Long version;
 
@@ -42,19 +41,13 @@ public class User {
     @Length(min = Constants.MIN_VARCHAR_LENGTH, max = Constants.MAX_VARCHAR_LENGTH)
     private String phone;
 
-    @Length(min = Constants.MIN_VARCHAR_LENGTH, max = Constants.MAX_VARCHAR_LENGTH)
-    private String docName;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "doc_concrete_number", referencedColumnName = "doc_number")
+    private DocConcrete docConcrete;
 
-    @Length(min = Constants.MIN_VARCHAR_LENGTH, max = Constants.MAX_VARCHAR_LENGTH)
-    private String docNumber;
-
-    private LocalDate docDate;
-
-    @Length(min = Constants.MIN_VARCHAR_LENGTH, max = Constants.MAX_VARCHAR_LENGTH)
-    private String citizenshipName;
-
-    @Length(min = Constants.MIN_VARCHAR_LENGTH, max = Constants.MAX_VARCHAR_LENGTH)
-    private String citizenshipCode;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "citizenship_code")
+    private Citizenship citizenship;
 
     private boolean isIdentified;
 
@@ -65,17 +58,14 @@ public class User {
     public User() {
     }
 
-    public User(String firstName, String secondName, String middleName, String position, String phone, String docName, String docNumber, LocalDate docDate, String citizenshipName, String citizenshipCode, boolean isIdentified) {
+    public User(String firstName, String secondName, String middleName, String position, String phone, DocConcrete docConcrete, Citizenship citizenship, boolean isIdentified) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.middleName = middleName;
         this.position = position;
         this.phone = phone;
-        this.docName = docName;
-        this.docNumber = docNumber;
-        this.docDate = docDate;
-        this.citizenshipName = citizenshipName;
-        this.citizenshipCode = citizenshipCode;
+        this.docConcrete = docConcrete;
+        this.citizenship = citizenship;
         this.isIdentified = isIdentified;
     }
 
@@ -135,44 +125,28 @@ public class User {
         this.phone = phone;
     }
 
-    public String getDocName() {
-        return docName;
+    public DocConcrete getDocConcrete() {
+        return docConcrete;
     }
 
-    public void setDocName(String docName) {
-        this.docName = docName;
+    public void setDocConcrete(DocConcrete docConcrete) {
+        this.docConcrete = docConcrete;
     }
 
-    public String getDocNumber() {
-        return docNumber;
+    public void setOffice(Office office) {
+        this.office = office;
     }
 
-    public void setDocNumber(String docNumber) {
-        this.docNumber = docNumber;
+    public Office getOffice() {
+        return office;
     }
 
-    public LocalDate getDocDate() {
-        return docDate;
+    public Citizenship getCitizenship() {
+        return citizenship;
     }
 
-    public void setDocDate(LocalDate docDate) {
-        this.docDate = docDate;
-    }
-
-    public String getCitizenshipName() {
-        return citizenshipName;
-    }
-
-    public void setCitizenshipName(String citizenshipName) {
-        this.citizenshipName = citizenshipName;
-    }
-
-    public String getCitizenshipCode() {
-        return citizenshipCode;
-    }
-
-    public void setCitizenshipCode(String citizenshipCode) {
-        this.citizenshipCode = citizenshipCode;
+    public void setCitizenship(Citizenship citizenship) {
+        this.citizenship = citizenship;
     }
 
     public boolean isIdentified() {

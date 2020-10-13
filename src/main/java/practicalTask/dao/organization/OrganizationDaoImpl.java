@@ -1,7 +1,10 @@
 package practicalTask.dao.organization;
 
 import org.springframework.stereotype.Repository;
+import practicalTask.domain.Citizenship;
+import practicalTask.domain.Office;
 import practicalTask.domain.Organization;
+import practicalTask.domain.User;
 import practicalTask.utils.ArgChecker;
 
 import javax.persistence.EntityManager;
@@ -51,6 +54,10 @@ public class OrganizationDaoImpl implements OrganizationDao {
         query.setParameter("name", "%" + name + "%");
         query.setParameter("inn", inn);
         query.setParameter("isActive", isActive);
+        Long id = 1L;
+        Query test = entityManager.createQuery("SELECT c FROM User c");
+
+        List<User> citizenshipList= test.getResultList();
         return query.getResultList();
     }
 

@@ -54,10 +54,6 @@ public class OrganizationDaoImpl implements OrganizationDao {
         query.setParameter("name", "%" + name + "%");
         query.setParameter("inn", inn);
         query.setParameter("isActive", isActive);
-        Long id = 1L;
-        Query test = entityManager.createQuery("SELECT c FROM User c");
-
-        List<User> citizenshipList= test.getResultList();
         return query.getResultList();
     }
 

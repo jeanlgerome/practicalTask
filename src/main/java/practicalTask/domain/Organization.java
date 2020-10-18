@@ -1,6 +1,6 @@
 package practicalTask.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Length;
 import practicalTask.controllers.OrganizationController;
 import practicalTask.utils.ArgChecker;
@@ -16,26 +16,28 @@ import java.util.Set;
  * Есть 2 public конструктора с параметрами (один из них без айди для операции save, другой с айди для update)
  * В случае save айди генерируется автоматически, в случае update созданный объект является DTO и
  * Содержит данные для обновления старой сущности, которая ищется по айди
- *
+ * <p>
  * В конструкторах и сеттерах проверяются параметры
  * Все String поля имеют ограничение по длине от 1 до 255
  * Имеются индексы для полей name, inn, isActive
- *
+ * <p>
  * Сущность связана с Office entity, как OneToMany, FetchType.LAZY, CascadeType.ALL
  */
 @Entity
 @Table(name = "organization", indexes = {@Index(name = "IX_organization_name", columnList = "name"),
-        @Index(name = "UX_organization_inn", columnList = "inn", unique = true),
+        @Index(name = "UX_organization_inn", columnList = "inn"),
         @Index(name = "IX_organization_isActive", columnList = "isActive")
 })
+
 public class Organization {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
     @Version
+    @JsonIgnore
     private Long version;
 
     @NotNull
@@ -61,9 +63,10 @@ public class Organization {
     @Length(min = Constants.MIN_VARCHAR_LENGTH, max = Constants.MAX_VARCHAR_LENGTH)
     private String phone;
 
+    @NotNull
     private boolean isActive;
 
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "organization")
@@ -89,31 +92,9 @@ public class Organization {
         this.inn = ArgChecker.requireNonBlank(inn, "inn");
         this.kpp = ArgChecker.requireNonBlank(kpp, "kpp");
         this.adress = ArgChecker.requireNonBlank(adress, "adress");
-        this.phone = (phone == null || phone.trim().isEmpty()) ? "no phone" : phone;
+        this.phone = phone;
         this.isActive = isActive;
         this.officeSet = new HashSet<>();
-    }
-
-    /**
-     * Конструктор, используется в контроллере OrganizationController в методе updateOrganization
-     * В него передаются пареметры из POST запроса, объект выступает в роли DTO, данные из него
-     * используется для поиска и обновления старой сущности
-     *
-     * @param id
-     * @param name
-     * @param fullName
-     * @param inn
-     * @param kpp
-     * @param adress
-     * @param phone
-     * @param isActive
-     * @throws IllegalArgumentException если обнаружены некооректные параметры
-     * @see OrganizationController
-     */
-    public Organization(Long id, String name, String fullName, String inn, String kpp, String adress, String phone, boolean isActive) {
-        this(name, fullName, inn, kpp, adress, phone, true);
-        ArgChecker.requireNonNull(id, "id");
-        this.setId(id);
     }
 
     public Organization() {
@@ -131,7 +112,7 @@ public class Organization {
         this.inn = ArgChecker.requireNonBlank(newData.inn, "inn");
         this.kpp = ArgChecker.requireNonBlank(newData.kpp, "kpp");
         this.adress = ArgChecker.requireNonBlank(newData.adress, "adress");
-        this.phone = (newData.phone == null || newData.phone.trim().isEmpty()) ? "no phone" : newData.phone;
+        this.phone = newData.phone;
         this.isActive = newData.isActive;
     }
 
@@ -140,7 +121,15 @@ public class Organization {
     }
 
     public void setId(Long id) {
-        this.id = ArgChecker.requireNonNull(id, "id");
+        this.id = id;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public String getName() {
@@ -188,7 +177,7 @@ public class Organization {
     }
 
     public void setPhone(String phone) {
-        this.phone = ArgChecker.requireNonBlank(phone, "phone");
+        this.phone = phone;
     }
 
     public boolean isActive() {

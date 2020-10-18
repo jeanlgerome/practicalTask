@@ -9,12 +9,17 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import practicalTask.utils.response.ErrorContainer;
 
 import javax.validation.ConstraintViolationException;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Класс обработки исключений в контроллере
  */
 @ControllerAdvice
 public class ExceptionInterceptor extends ResponseEntityExceptionHandler {
+
+    private Logger logger = Logger.getLogger(ExceptionInterceptor.class.toString());
 
     /**
      * Обрабатывает исключение и помещает его сообщение в ErrorContainer, который затем
@@ -25,10 +30,12 @@ public class ExceptionInterceptor extends ResponseEntityExceptionHandler {
      * @see ErrorContainer
      */
     @ExceptionHandler(ConstraintViolationException.class)
-    public final ResponseEntity<Object> handleConstraintViolationExceptions(
+    public final ResponseEntity handleConstraintViolationExceptions(
             ConstraintViolationException ex) {
-        String exceptionResponse = String.format("Invalid input parameters: %s", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorContainer(exceptionResponse));
+        String uuid = UUID.randomUUID().toString().toUpperCase();
+        logger.log(Level.WARNING, String.format("Invalid input parameters: %s. UUID: %s", ex.getMessage(), uuid), ex);
+        String exceptionResponse = String.format("Invalid input parameters: %s. UUID: %s", ex.getMessage(), uuid);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorContainer(exceptionResponse));
     }
 
     /**
@@ -40,8 +47,10 @@ public class ExceptionInterceptor extends ResponseEntityExceptionHandler {
      * @see ErrorContainer
      */
     @ExceptionHandler(IllegalArgumentException.class)
-    public final ResponseEntity<Object> handleIllegalArgumentExceptions(IllegalArgumentException ex) {
-        String exceptionResponse = String.format("IllegalArgumentException: %s", ex.getMessage());
+    public final ResponseEntity handleIllegalArgumentExceptions(IllegalArgumentException ex) {
+        String uuid = UUID.randomUUID().toString().toUpperCase();
+        logger.log(Level.WARNING, String.format("Invalid input parameters: %s. UUID: %s", ex.getMessage(), uuid), ex);
+        String exceptionResponse = String.format("IllegalArgumentException: %s. UUID: %s", ex.getMessage(), uuid);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorContainer(exceptionResponse));
     }
 
@@ -54,8 +63,10 @@ public class ExceptionInterceptor extends ResponseEntityExceptionHandler {
      * @see ErrorContainer
      */
     @ExceptionHandler(HibernateException.class)
-    public final ResponseEntity<Object> handleHibernateExceptions(HibernateException ex) {
-        String exceptionResponse = String.format("HibernateException: %s", ex.getMessage());
+    public final ResponseEntity handleHibernateExceptions(HibernateException ex) {
+        String uuid = UUID.randomUUID().toString().toUpperCase();
+        String exceptionResponse = String.format("Внутренняя ошибка сервера. UUID: %s", uuid);
+        logger.log(Level.WARNING, String.format("Invalid input parameters: %s. UUID: %s", ex.getMessage(), uuid), ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorContainer(exceptionResponse));
     }
 
@@ -68,8 +79,10 @@ public class ExceptionInterceptor extends ResponseEntityExceptionHandler {
      * @see ErrorContainer
      */
     @ExceptionHandler(Exception.class)
-    public final ResponseEntity<Object> handleUnknownExceptions(Exception ex) {
-        String exceptionResponse = String.format("Unknown Exception: %s", ex.getMessage());
+    public final ResponseEntity handleUnknownExceptions(Exception ex) {
+        String uuid = UUID.randomUUID().toString().toUpperCase();
+        logger.log(Level.WARNING, String.format("Invalid input parameters: %s. UUID: %s", ex.getMessage(), uuid), ex);
+        String exceptionResponse = String.format("Внутренняя ошибка сервера. UUID: %s", uuid);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorContainer(exceptionResponse));
     }
 }

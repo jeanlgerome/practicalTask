@@ -30,9 +30,9 @@ VALUES (44-44-44, '2004-04-04', 91 );
 INSERT INTO organization (id, version, adress, full_name, inn, is_active, kpp, name, phone)
 VALUES (1, 0, 'Hawthorne, CA', 'SpaceX', '111-1', true, '111', 'SpaceX', '111-111');
 INSERT INTO organization (id, version, adress, full_name, inn, is_active, kpp, name, phone)
-VALUES (3, 0, 'San Francisco', 'GitHub Inc', '222-2', true, '222', 'GitHub', '222-222');
+VALUES (2, 0, 'San Francisco', 'GitHub Inc', '222-2', true, '222', 'GitHub', '222-222');
 INSERT INTO organization (id, version, adress, full_name, inn, is_active, kpp, name, phone)
-VALUES (2, 0, 'Prague', 'JetBrains s.r.o. ', '333-3', true, '333', 'JetBrains', '333-333');
+VALUES (3, 0, 'Prague', 'JetBrains s.r.o. ', '333-3', true, '333', 'JetBrains', '333-333');
 
 INSERT INTO office (id,  adress, is_active, name, phone, version, organization_id)
 VALUES (1, 'Hawthorne, CA', true, 'SpaceX Office', '111-111', 0, 1);

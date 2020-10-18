@@ -1,5 +1,8 @@
 package practicalTask.utils.response;
 
+/**
+ * Контейнер для данных, в нем информация отправляется пользователю
+ */
 public class DataContainer {
 
     private final Object data;

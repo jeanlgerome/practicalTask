@@ -1,5 +1,6 @@
 package practicalTask.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Length;
 import practicalTask.utils.Constants;
 
@@ -14,17 +15,17 @@ import java.util.Set;
  * Сущность связана с User entity, как OneToMany CascadeType.ALL, FetchType.LAZY
  */
 @Entity
-@Table(name = "citizenship")
+@Table(name = "citizenship", indexes = {@Index(name = "IX_citizenship_citizenshipCode", columnList = "citizenshipCode")})
 public class Citizenship {
 
     @Id
-    @NotNull
     private Long citizenshipCode;
 
     @NotNull
     @Length(min = Constants.MIN_VARCHAR_LENGTH, max = Constants.MAX_VARCHAR_LENGTH)
     private String citizenshipName;
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "citizenship")

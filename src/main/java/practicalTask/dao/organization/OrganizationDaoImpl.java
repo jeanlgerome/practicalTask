@@ -1,15 +1,16 @@
 package practicalTask.dao.organization;
 
 import org.springframework.stereotype.Repository;
-import practicalTask.domain.Citizenship;
-import practicalTask.domain.Office;
+import org.springframework.transaction.annotation.Transactional;
 import practicalTask.domain.Organization;
-import practicalTask.domain.User;
 import practicalTask.utils.ArgChecker;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 /**
@@ -36,34 +37,58 @@ public class OrganizationDaoImpl implements OrganizationDao {
     }
 
     /**
-     * Поиск списка организаций по параметрам.
-     * Если inn или isActive не заданы, то ищет любые организации
-     * с заданными параметрами
+     * Возвращает ссылку на организацию с требуемым айди. Если организации нет, то возвращает null,
+     * что вызывает выброс исключения в OrganizationService
+     * Используется в случаях, когда нет необходимости загружать поля сущности
      *
-     * @param name     параметр поиска
+     * @param id параметр поиска организации
+     * @return организацию с требуемым айди
+     * @throws IllegalArgumentException если id == null
+     */
+    @Override
+    public Organization findReference(Long id) {
+        ArgChecker.requireNonNull(id, "orgId");
+        return entityManager.getReference(Organization.class, id);
+    }
+
+    /**
+     * Поиск организаций по параметрам.
+     * При этом необязательные параметры могут отсутствовать
+     *
+     * @param name     обязательный   параметр поиска
      * @param inn      параметр поиска
      * @param isActive параметр поиска
      * @return список организаций с подходящими параметрами
-     * @throws IllegalArgumentException если параметры некорректны
+     * @throws IllegalArgumentException если name не задан
      */
     @Override
     public List<Organization> findAll(String name, String inn, boolean isActive) {
         ArgChecker.requireNonBlank(name, "name");
-        Query query = entityManager.createQuery("SELECT o FROM Organization o WHERE (o.name like :name ) and (:inn is null"
-                + " or o.inn = :inn) and (o.isActive = :isActive)");
-        query.setParameter("name", "%" + name + "%");
-        query.setParameter("inn", inn);
-        query.setParameter("isActive", isActive);
-        return query.getResultList();
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Organization> organizationQuery = cb.createQuery(Organization.class);
+        Root<Organization> organizationRoot = organizationQuery.from(Organization.class);
+
+        Predicate mainPredicate = cb.conjunction();
+        mainPredicate = cb.and(mainPredicate, cb.equal(organizationRoot.get("name"), name));
+        organizationQuery.select(organizationRoot);
+
+        if (inn != null && !inn.isEmpty()) {
+            Predicate p = cb.equal(organizationRoot.get("inn"), inn);
+            mainPredicate = cb.and(mainPredicate, p);
+        }
+        organizationQuery.where(mainPredicate);
+        return entityManager.createQuery(organizationQuery).getResultList();
     }
 
     /**
      * Сохраняет данную организацию
      *
-     * @param organization  сохраняемая сущность
+     * @param organization сохраняемая сущность
      * @throws IllegalArgumentException если organization == null
      */
+
     @Override
+    @Transactional
     public void save(Organization organization) {
         ArgChecker.requireNonNull(organization, "organization");
         entityManager.persist(organization);
@@ -72,11 +97,12 @@ public class OrganizationDaoImpl implements OrganizationDao {
     /**
      * Обновляет данную организацию
      *
-     * @param organization  обновляемая сущность
+     * @param organization обновляемая сущность
      * @return обновленную организацию
      * @throws IllegalArgumentException если organization == null
      */
     @Override
+    @Transactional
     public Organization update(Organization organization) {
         ArgChecker.requireNonNull(organization, "organization");
         return entityManager.merge(organization);

@@ -3,7 +3,6 @@ package practicalTask.service.organization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import practicalTask.dao.organization.OrganizationDao;
 import practicalTask.domain.Organization;
 import practicalTask.utils.ArgChecker;
@@ -11,13 +10,12 @@ import practicalTask.utils.ArgChecker;
 import java.util.List;
 
 /**
- * Organization Сервис, использует OrganizationDao, формирует и предоставляет данные контроллеру
+ * Organization Сервис, формирует и предоставляет данные контроллеру
+ * использует OrganizationDao
  *
- * @version 1.0
  * @see OrganizationDao
  */
 @Service
-@Transactional
 public class OrganizationServiceImpl implements OrganizationService {
 
     @Autowired
@@ -39,7 +37,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         Organization organization = organizationDao.findOne(id);
 
         if (organization == null) {
-            throw new IllegalArgumentException("organization not found");
+            throw new IllegalArgumentException("Organization not found");
         }
         return organization;
     }
@@ -52,7 +50,7 @@ public class OrganizationServiceImpl implements OrganizationService {
      * @param inn      инн организации
      * @param isActive статус активности
      * @return список организаций с подходящими параметрами
-     * @throws IllegalArgumentException, если пареметр name пуст
+     * @throws IllegalArgumentException если отсутствуют обязательные параметры
      * @see OrganizationDao
      */
     @Override
@@ -71,6 +69,7 @@ public class OrganizationServiceImpl implements OrganizationService {
      * @throws IllegalArgumentException, если organization пуста
      * @see OrganizationDao
      */
+
     @Override
     public void save(Organization organization) {
         ArgChecker.requireNonNull(organization, "organization");
@@ -78,19 +77,19 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     /**
-     * Обновляет старую организацию:
-     * Использует айди из объекта с новыми данными, чтоб найти старую сущность, затем обновляет поля в старой сущности
-     * и сохраняет её.
-     * Внутри используется методы organizationDao.findOne и organizationDao.update
+     * Обновляет старую организацию
      *
-     * @param newOrganizationData - объект с новыми данными
-     * @throws IllegalArgumentException, если newOrganizationData пуста
+     * @param orgId               айди обновляемой организации
+     *                            Внутри используется методы organizationDao.findOne и organizationDao.update
+     * @param newOrganizationData объект с новыми данными
+     * @throws IllegalArgumentException если orgId или newOrganizationData пусты
      * @see OrganizationDao
      */
     @Override
-    public void update(Organization newOrganizationData) {
+    public void update(Long orgId, Organization newOrganizationData) {
+        ArgChecker.requireNonNull(orgId, "orgId");
         ArgChecker.requireNonNull(newOrganizationData, "newOrganizationData");
-        Organization organizationOld = getOrganization(newOrganizationData.getId());
+        Organization organizationOld = getOrganization(orgId);
         organizationOld.updateData(newOrganizationData);
         organizationDao.update(organizationOld);
     }

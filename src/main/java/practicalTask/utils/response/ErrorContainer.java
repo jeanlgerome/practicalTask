@@ -1,5 +1,8 @@
 package practicalTask.utils.response;
 
+/**
+ * Контейнер для ошибки
+ */
 public class ErrorContainer {
 
     private final String error;

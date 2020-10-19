@@ -1,9 +1,7 @@
 package practicalTask.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Length;
 import practicalTask.controllers.OrganizationController;
-import practicalTask.utils.ArgChecker;
 import practicalTask.utils.Constants;
 
 import javax.persistence.*;
@@ -37,7 +35,6 @@ public class Organization {
 
     @NotNull
     @Version
-    @JsonIgnore
     private Long version;
 
     @NotNull
@@ -66,7 +63,6 @@ public class Organization {
     @NotNull
     private boolean isActive;
 
-    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "organization")
@@ -87,11 +83,11 @@ public class Organization {
      * @see OrganizationController
      */
     public Organization(String name, String fullName, String inn, String kpp, String adress, String phone, boolean isActive) {
-        this.name = ArgChecker.requireNonBlank(name, "name");
-        this.fullName = ArgChecker.requireNonBlank(fullName, "fullName");
-        this.inn = ArgChecker.requireNonBlank(inn, "inn");
-        this.kpp = ArgChecker.requireNonBlank(kpp, "kpp");
-        this.adress = ArgChecker.requireNonBlank(adress, "adress");
+        this.name = name;
+        this.fullName = fullName;
+        this.inn = inn;
+        this.kpp = kpp;
+        this.adress = adress;
         this.phone = phone;
         this.isActive = isActive;
         this.officeSet = new HashSet<>();
@@ -107,11 +103,11 @@ public class Organization {
      * @throws IllegalArgumentException если обнаружены некооректные данные
      */
     public void updateData(Organization newData) {
-        this.name = ArgChecker.requireNonBlank(newData.name, "name");
-        this.fullName = ArgChecker.requireNonBlank(newData.fullName, "fullName");
-        this.inn = ArgChecker.requireNonBlank(newData.inn, "inn");
-        this.kpp = ArgChecker.requireNonBlank(newData.kpp, "kpp");
-        this.adress = ArgChecker.requireNonBlank(newData.adress, "adress");
+        this.name = newData.name;
+        this.fullName = newData.fullName;
+        this.inn = newData.inn;
+        this.kpp = newData.kpp;
+        this.adress = newData.adress;
         this.phone = newData.phone;
         this.isActive = newData.isActive;
     }
@@ -137,7 +133,7 @@ public class Organization {
     }
 
     public void setName(String name) {
-        this.name = ArgChecker.requireNonBlank(name, "name");
+        this.name = name;
     }
 
     public String getFullName() {
@@ -145,7 +141,7 @@ public class Organization {
     }
 
     public void setFullName(String fullName) {
-        this.fullName = ArgChecker.requireNonBlank(fullName, "fullName");
+        this.fullName = fullName;
     }
 
     public String getInn() {
@@ -153,7 +149,7 @@ public class Organization {
     }
 
     public void setInn(String inn) {
-        this.inn = ArgChecker.requireNonBlank(inn, "inn");
+        this.inn = inn;
     }
 
     public String getKpp() {
@@ -161,7 +157,7 @@ public class Organization {
     }
 
     public void setKpp(String kpp) {
-        this.kpp = ArgChecker.requireNonBlank(kpp, "kpp");
+        this.kpp = kpp;
     }
 
     public String getAdress() {
@@ -169,7 +165,7 @@ public class Organization {
     }
 
     public void setAdress(String adress) {
-        this.adress = ArgChecker.requireNonBlank(adress, "adress");
+        this.adress = adress;
     }
 
     public String getPhone() {

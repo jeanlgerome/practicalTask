@@ -20,8 +20,8 @@ public class OfficeDto {
      * Конструктор. Используется в сервисе при передаче результата поиска с заданными парамтреами
      */
     public OfficeDto(Long id, String name, boolean isActive) {
-        this.id = ArgChecker.requireNonNull(id, "id");
-        this.name = ArgChecker.requireNonBlank(name, "name");
+        this.id = id;
+        this.name = name;
         this.isActive = isActive;
     }
 
@@ -29,10 +29,10 @@ public class OfficeDto {
      * Конструктор. Используется в сервисе при передаче результата поиска по айди
      */
     public OfficeDto(Office office) {
-        this.id = ArgChecker.requireNonNull(office.getId(), "id");
-        this.name = ArgChecker.requireNonBlank(office.getName(), "name");
-        this.adress = ArgChecker.requireNonBlank(office.getAdress(), "adress");
-        this.phone = ArgChecker.requireNonBlank(office.getPhone(), "phone");
+        this.id = office.getId();
+        this.name = office.getName();
+        this.adress =office.getAdress();
+        this.phone = office.getPhone();
         this.isActive = office.isActive();
     }
 

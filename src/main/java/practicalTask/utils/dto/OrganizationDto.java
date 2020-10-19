@@ -27,8 +27,8 @@ public class OrganizationDto {
      * Конструктор. Используется в сервисе при передаче результата поиска с заданными парамтреами
      */
     public OrganizationDto(String name, String inn, boolean isActive) {
-        this.name = ArgChecker.requireNonBlank(name, "name");
-        this.inn = ArgChecker.requireNonBlank(inn, "inn");
+        this.name = name;
+        this.inn = inn;
         this.isActive = isActive;
     }
 
@@ -36,12 +36,12 @@ public class OrganizationDto {
      * Конструктор. Используется в сервисе при передаче результата поиска по айди
      */
     public OrganizationDto(Organization organization) {
-        this.id = ArgChecker.requireNonNull(organization.getId(), "Id");
-        this.name = ArgChecker.requireNonBlank(organization.getName(), "name");
-        this.fullName = ArgChecker.requireNonBlank(organization.getFullName(), "fullName");
-        this.inn = ArgChecker.requireNonBlank(organization.getInn(), "inn");
-        this.kpp = ArgChecker.requireNonBlank(organization.getKpp(), "kpp");
-        this.adress = ArgChecker.requireNonBlank(organization.getAdress(), "address");
+        this.id = organization.getId();
+        this.name = organization.getName();
+        this.fullName = organization.getFullName();
+        this.inn = organization.getInn();
+        this.kpp = organization.getKpp();
+        this.adress = organization.getAdress();
         this.phone = organization.getPhone();
         this.isActive = organization.isActive();
     }

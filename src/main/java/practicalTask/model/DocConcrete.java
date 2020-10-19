@@ -1,8 +1,6 @@
 package practicalTask.model;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.validator.constraints.Length;
 import practicalTask.utils.Constants;
 
@@ -17,14 +15,12 @@ import java.time.LocalDate;
  * Также сущность связана с User entity, как OneToOne CascadeType.ALL
  */
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "doc_concrete", indexes = {@Index(name = "IX_doc_concrete_docType", columnList = "doc_code")})
 public class DocConcrete {
 
 
     @Id
     @Length(min = Constants.MIN_VARCHAR_LENGTH, max = Constants.MAX_VARCHAR_LENGTH)
-    @Column(name = "doc_number")
     private String docNumber;
 
     @NotNull
@@ -34,8 +30,7 @@ public class DocConcrete {
     @JoinColumn(name = "doc_code", nullable = false)
     private DocType docType;
 
-
-    @JsonIgnore
+    @MapsId("usr_doc_number")
     @OneToOne(mappedBy = "docConcrete", cascade = CascadeType.ALL,
             fetch = FetchType.LAZY, optional = false)
     private User user;

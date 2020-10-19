@@ -1,8 +1,8 @@
 package practicalTask.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import org.hibernate.validator.constraints.Length;
-import practicalTask.utils.ArgChecker;
+
 import practicalTask.utils.Constants;
 
 import javax.persistence.*;
@@ -25,7 +25,6 @@ public class Office {
 
     @NotNull
     @Version
-    @JsonIgnore
     private Long version;
 
 
@@ -42,12 +41,10 @@ public class Office {
     private boolean isActive;
 
     @NotNull
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organization_id", nullable = false)
     private Organization organization;
 
-    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "office")
@@ -57,18 +54,16 @@ public class Office {
     }
 
     public Office(String name, String adress, String phone, boolean isActive) {
-
-        this.name = ArgChecker.requireNonBlank(name, "name");
-        this.adress = ArgChecker.requireNonBlank(adress, "adress");
-        this.phone = (phone == null || phone.trim().isEmpty()) ? "no phone" : phone;
+        this.name = name;
+        this.adress = adress;
+        this.phone = phone;
         this.isActive = isActive;
     }
 
-
     public void update(Office newData) {
-        this.name = ArgChecker.requireNonBlank(newData.name, "name");
-        this.adress = ArgChecker.requireNonBlank(newData.adress, "adress");
-        this.phone = ArgChecker.requireNonBlank(newData.phone, "phone");
+        this.name = newData.name;
+        this.adress = newData.adress;
+        this.phone = newData.phone;
         this.isActive = newData.isActive;
     }
 

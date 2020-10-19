@@ -38,10 +38,10 @@ public class UserDto {
      * Конструктор. Используется в сервисе при передаче результата поиска с заданными парамтреами
      */
     public UserDto( String firstName, String secondName, String middleName, String position, Long docCode, Long citizenshipCode) {
-        this.firstName = ArgChecker.requireNonBlank(firstName, "firstName");
+        this.firstName = firstName;
         this.secondName = secondName;
         this.middleName = middleName;
-        this.position = ArgChecker.requireNonBlank(position, "position");
+        this.position = position;
         this.docCode = docCode;
         this.citizenshipCode = citizenshipCode;
     }
@@ -70,10 +70,10 @@ public class UserDto {
     public UserDto(User userFromDb) {
         ArgChecker.requireNonNull(userFromDb, "userFromDb");
         this.id = userFromDb.getId();
-        this.firstName = ArgChecker.requireNonBlank(userFromDb.getFirstName(), "firstName");
+        this.firstName = userFromDb.getFirstName();
         this.secondName = userFromDb.getSecondName();
         this.middleName = userFromDb.getMiddleName();
-        this.position = ArgChecker.requireNonBlank(userFromDb.getPosition(), "position");
+        this.position = userFromDb.getPosition();
         this.phone = userFromDb.getPhone();
         this.docCode = userFromDb.getDocCode();
         this.citizenshipCode = userFromDb.getCitizenshipCode();

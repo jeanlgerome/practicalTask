@@ -1,6 +1,5 @@
 package practicalTask.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Length;
 import practicalTask.utils.Constants;
 
@@ -24,8 +23,6 @@ public class DocType {
     @Length(min = Constants.MIN_VARCHAR_LENGTH, max = Constants.MAX_VARCHAR_LENGTH)
     private String docName;
 
-
-    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "docType")

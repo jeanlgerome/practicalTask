@@ -1,18 +1,3 @@
-drop table usr if exists;
-
-drop table citizenship if exists;
-
-drop table doc_concrete if exists;
-
-drop table doc_type if exists;
-
-drop table office if exists;
-
-drop table organization if exists;
-
-drop sequence if exists hibernate_sequence;
-create sequence hibernate_sequence start with 4 increment by 1;
-
 
 create table IF NOT EXISTS citizenship
 (
@@ -67,17 +52,17 @@ create table IF NOT EXISTS organization
 
 create table IF NOT EXISTS usr
 (
-  id                  bigint       not null AUTO_INCREMENT, -- Уникальный идентификатор
-  first_name          varchar(255) not null,                -- Имя
-  is_identified       boolean      not null,                -- Статус идентификации
-  middle_name         varchar(255),                         -- Второе имя
-  phone               varchar(255),                         -- Телефон
-  position            varchar(255) not null,                -- Должность
-  second_name         varchar(255),                         -- Фамилия
-  version             bigint       not null,                -- Служебное поле hibernate
-  citizenship_code    bigint,                               -- Код гражданства. Однозначно задает название страны
-  doc_concrete_number varchar(255),                         -- Номер документа. Однозначно задает документ. По номеру определяется тип и дата
-  office_id           bigint       not null,                -- Айди офиса
+  id                      bigint       not null AUTO_INCREMENT, -- Уникальный идентификатор
+  first_name              varchar(255) not null,                -- Имя
+  is_identified           boolean      not null,                -- Статус идентификации
+  middle_name             varchar(255),                         -- Второе имя
+  phone                   varchar(255),                         -- Телефон
+  position                varchar(255) not null,                -- Должность
+  second_name             varchar(255),                         -- Фамилия
+  version                 bigint       not null,                -- Служебное поле hibernate
+  citizenship_code        bigint,                               -- Код гражданства. Однозначно задает название страны
+  doc_number varchar(255),                         -- Номер документа. Однозначно задает документ. По номеру определяется тип и дата
+  office_id               bigint       not null,                -- Айди офиса
   primary key (id)
 );
 
@@ -90,12 +75,12 @@ create index IX_office_isActive on office (is_active);
 alter table office
   add constraint UX_office_phone unique (phone);
 alter table usr
-  add constraint IX_usr_docConcrete unique (doc_concrete_number);
+  add constraint IX_usr_docConcrete unique (doc_number);
 create index IX_organization_name on organization (name);
 create index IX_organization_isActive on organization (is_active);
 alter table organization
   add constraint UX_organization_inn unique (inn);
-create index IX_usr_docConcrete on usr (doc_concrete_number);
+create index IX_usr_docConcrete on usr (doc_number);
 create index IX_usr_office on usr (office_id);
 create index IX_usr_firstName on usr (first_name);
 create index IX_usr_secondName on usr (second_name);
@@ -109,6 +94,6 @@ alter table office
 alter table usr
   add constraint FKfdceh039sg6imvqdv0eo5c5jn foreign key (citizenship_code) references citizenship;
 alter table usr
-  add constraint FKtotb11qqgqdtc8xja6ftetgss foreign key (doc_concrete_number) references doc_concrete;
-alter table usr
   add constraint FK17kfclc8qt8kn3n4hg8hk58nm foreign key (office_id) references office;
+alter table usr
+  add constraint FKtotb11qqgqdtc8xja6ftetgss foreign key (doc_number) references doc_concrete;

@@ -17,15 +17,18 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
+    private final UserDao userDao;
+
+    private final OfficeDao officeDao;
+
+    private final HandbookService handbookService;
+
     @Autowired
-    @Qualifier("userDaoImpl")
-    UserDao userDao;
-    @Autowired
-    @Qualifier("officeDaoImpl")
-    OfficeDao officeDao;
-    @Autowired
-    @Qualifier("handbookServiceImpl")
-    HandbookService handbookService;
+    public UserServiceImpl( @Qualifier("userDaoImpl")UserDao userDao, @Qualifier("officeDaoImpl")OfficeDao officeDao, @Qualifier("handbookServiceImpl")HandbookService handbookService) {
+        this.userDao= userDao;
+        this.officeDao = officeDao;
+        this.handbookService = handbookService;
+    }
 
     /**
      * Поиск пользователя по айди
@@ -63,7 +66,7 @@ public class UserServiceImpl implements UserService {
         List<User> userList = userDao.findAll(officeId, firstName, lastName, middleName, position, docCode, citizenshipCode);
         List<UserDto> dtoList = new ArrayList<>();
         for (User user : userList) {
-            dtoList.add(new UserDto(user.getFirstName(), user.getSecondName(), user.getMiddleName(), user.getPosition(), user.getDocConcrete().getDocType().getDocCode(), user.getCitizenship().getCitizenshipCode()));
+            dtoList.add(new UserDto(user.getFirstName(), user.getSecondName(), user.getMiddleName(), user.getPosition(), user.getDocCode(), user.getCitizenshipCode()));
         }
         return dtoList;
     }

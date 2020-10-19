@@ -1,4 +1,17 @@
+drop table usr if exists;
 
+drop table citizenship if exists;
+
+drop table doc_concrete if exists;
+
+drop table doc_type if exists;
+
+drop table office if exists;
+
+drop table organization if exists;
+
+drop sequence if exists hibernate_sequence;
+create sequence hibernate_sequence start with 4 increment by 1;
 
 
 create table IF NOT EXISTS citizenship

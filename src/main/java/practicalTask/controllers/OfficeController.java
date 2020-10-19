@@ -25,9 +25,12 @@ import java.util.Map;
 @RestController
 public class OfficeController {
 
+    private final OfficeService officeService;
+
     @Autowired
-    @Qualifier("officeServiceImpl")
-    OfficeService officeService;
+    public OfficeController(@Qualifier("officeServiceImpl")OfficeService officeService){
+        this.officeService = officeService;
+    }
 
     /**
      * Возвращает офис по его айди

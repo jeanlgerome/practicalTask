@@ -82,13 +82,13 @@ public class UserDaoImpl implements UserDao {
             mainPredicate = cb.and(mainPredicate, p);
         }
         if (docCode != null && !docCode.isEmpty()) {
-            Join<User, DocConcrete> docConcreteJoin = userRoot.join("docConcrete");
-            Join<DocConcrete, DocType> docTypeJoin = docConcreteJoin.join("docType");
+            Join<User, DocConcrete> docConcreteJoin = userRoot.join("docConcrete",JoinType.LEFT);
+            Join<DocConcrete, DocType> docTypeJoin = docConcreteJoin.join("docType",JoinType.LEFT);
             Predicate p = cb.equal(docTypeJoin.get("docCode"), docCode);
             mainPredicate = cb.and(mainPredicate, p);
         }
         if (citizenshipCode != null && !citizenshipCode.isEmpty()) {
-            Join<User, Citizenship> citizenshipJoin = userRoot.join("citizenship");
+            Join<User, Citizenship> citizenshipJoin = userRoot.join("citizenship",JoinType.LEFT);
             Predicate p = cb.equal(citizenshipJoin.get("citizenshipCode"), citizenshipCode);
             mainPredicate = cb.and(mainPredicate, p);
         }

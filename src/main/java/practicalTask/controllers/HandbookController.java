@@ -5,8 +5,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import practicalTask.domain.Citizenship;
-import practicalTask.domain.DocType;
 import practicalTask.service.handbookService.HandbookService;
 import practicalTask.utils.dto.CitizenshipDto;
 import practicalTask.utils.dto.DocTypeDto;
@@ -20,9 +18,12 @@ import java.util.List;
 @RestController
 public class HandbookController {
 
+    private final HandbookService handbookService;
+
     @Autowired
-    @Qualifier("handbookServiceImpl")
-    HandbookService handbookService;
+    public HandbookController(@Qualifier("handbookServiceImpl") HandbookService handbookService) {
+        this.handbookService = handbookService;
+    }
 
     /**
      * api docs

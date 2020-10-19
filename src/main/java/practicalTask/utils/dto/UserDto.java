@@ -77,11 +77,20 @@ public class UserDto {
         this.middleName = userFromDb.getMiddleName();
         this.position = ArgChecker.requireNonBlank(userFromDb.getPosition(), "position");
         this.phone = userFromDb.getPhone();
-        this.docCode = userFromDb.getDocConcrete().getDocType().getDocCode();
-        this.docName = userFromDb.getDocConcrete().getDocType().getDocName();
-        this.docNumber = userFromDb.getDocConcrete().getDocNumber();
-        this.docDate = userFromDb.getDocConcrete().getDocDate().toString();
-        this.citizenshipCode = userFromDb.getCitizenship().getCitizenshipCode();
+        this.docCode = userFromDb.getDocCode();
+        this.citizenshipCode = userFromDb.getCitizenshipCode();
+        if(userFromDb.getDocConcrete()!=null&&userFromDb.getDocConcrete().getDocType()!=null){
+            this.docName = userFromDb.getDocConcrete().getDocType().getDocName();
+        }else {
+            this.docName = null;
+        }
+        if(userFromDb.getDocConcrete()!=null){
+            this.docNumber = userFromDb.getDocConcrete().getDocNumber();
+            this.docDate = userFromDb.getDocConcrete().getDocDate().toString();
+        }else {
+            this.docNumber = null;
+            this.docDate = null;
+        }
         this.isIdentified = userFromDb.isIdentified();
     }
 

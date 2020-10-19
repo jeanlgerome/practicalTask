@@ -12,10 +12,7 @@ import practicalTask.utils.response.ResultContainer;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Контроллер для обработки запросов связанных с организациями
@@ -25,9 +22,12 @@ import java.util.Map;
 @RestController
 public class OrganizationController {
 
+    private  final OrganizationService organizationService;
+
     @Autowired
-    @Qualifier("organizationServiceImpl")
-    OrganizationService organizationService;
+    public OrganizationController(@Qualifier("organizationServiceImpl") OrganizationService organizationService) {
+        this.organizationService = organizationService;
+    }
 
     /**
      * Возвращает  организацию по ее айди

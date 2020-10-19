@@ -52,17 +52,13 @@ public class User {
     @NotNull
     private boolean isIdentified;
 
-
-    @MapsId("doc_number")
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "doc_concrete_number")
     private DocConcrete docConcrete;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "citizenship_code")
     private Citizenship citizenship;
-
 
     @JsonIgnore
     @NotNull
@@ -100,6 +96,20 @@ public class User {
         this.position = ArgChecker.requireNonBlank(newUserData.getPosition(), "position");
         this.phone = newUserData.getPhone();
         this.isIdentified = newUserData.isIdentified();
+    }
+
+    public Long getDocCode() {
+        if (docConcrete != null && docConcrete.getDocType() != null) {
+            return docConcrete.getDocType().getDocCode();
+        }
+        return null;
+    }
+
+    public Long getCitizenshipCode() {
+        if (citizenship != null && citizenship.getCitizenshipCode() != null) {
+            return citizenship.getCitizenshipCode();
+        }
+        return null;
     }
 
     public Long getId() {

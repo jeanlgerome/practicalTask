@@ -18,12 +18,15 @@ import java.util.List;
 @Service
 public class OfficeServiceImpl implements OfficeService {
 
+    private final OfficeDao officeDao;
+
+    private final OrganizationDao organizationDao;
+
     @Autowired
-    @Qualifier("officeDaoImpl")
-    OfficeDao officeDao;
-    @Autowired
-    @Qualifier("organizationDaoImpl")
-    OrganizationDao organizationDao;
+    public OfficeServiceImpl(@Qualifier("officeDaoImpl") OfficeDao officeDao, @Qualifier("organizationDaoImpl") OrganizationDao organizationDao) {
+        this.officeDao = officeDao;
+        this.organizationDao = organizationDao;
+    }
 
     /**
      * Поиск офиса по айди
@@ -77,7 +80,7 @@ public class OfficeServiceImpl implements OfficeService {
     public void save(Long orgId, Office office) {
         ArgChecker.requireNonNull(office, "office");
         ArgChecker.requireNonNull(orgId, "orgId");
-        Organization organization =  organizationDao.findOne(orgId);
+        Organization organization = organizationDao.findOne(orgId);
         office.setOrganization(organization);
         officeDao.save(office);
     }

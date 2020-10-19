@@ -5,16 +5,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import practicalTask.domain.User;
 import practicalTask.service.user.UserService;
 import practicalTask.utils.dto.UserDto;
 import practicalTask.utils.response.DataContainer;
 import practicalTask.utils.response.ResultContainer;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -25,9 +21,12 @@ import java.util.Map;
 @RestController
 public class UserController {
 
+    private final UserService userService;
+
     @Autowired
-    @Qualifier("userServiceImpl")
-    UserService userService;
+    public UserController(@Qualifier("userServiceImpl") UserService userService){
+        this.userService = userService;
+    }
 
     /**
      * Возвращает пользователя по его айди

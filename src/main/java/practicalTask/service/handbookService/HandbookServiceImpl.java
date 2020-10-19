@@ -23,9 +23,12 @@ import java.util.List;
 @Service
 public class HandbookServiceImpl implements HandbookService {
 
+    private final HandbookDao handbookDao;
+
     @Autowired
-    @Qualifier("handbookDaoImpl")
-    HandbookDao handbookDao;
+    public HandbookServiceImpl(@Qualifier("handbookDaoImpl") HandbookDao handbookDao) {
+        this.handbookDao = handbookDao;
+    }
 
     /**
      * @return dto всех типов документов
@@ -34,7 +37,7 @@ public class HandbookServiceImpl implements HandbookService {
     public List<DocTypeDto> getDocTypes() {
         List<DocType> docTypeList = handbookDao.findAllDocTypes();
         List<DocTypeDto> dtoList = new ArrayList<>();
-        for (DocType docType: docTypeList) {
+        for (DocType docType : docTypeList) {
             dtoList.add(new DocTypeDto(docType));
         }
         return dtoList;
@@ -47,7 +50,7 @@ public class HandbookServiceImpl implements HandbookService {
     public List<CitizenshipDto> getCitizenships() {
         List<Citizenship> citizenshipList = handbookDao.findAllCitizenships();
         List<CitizenshipDto> dtoList = new ArrayList<>();
-        for (Citizenship citizenship: citizenshipList) {
+        for (Citizenship citizenship : citizenshipList) {
             dtoList.add(new CitizenshipDto(citizenship));
         }
         return dtoList;

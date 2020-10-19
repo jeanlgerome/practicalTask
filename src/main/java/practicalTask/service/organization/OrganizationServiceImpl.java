@@ -21,9 +21,12 @@ import java.util.List;
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
 
+    private final OrganizationDao organizationDao;
+
     @Autowired
-    @Qualifier("organizationDaoImpl")
-    OrganizationDao organizationDao;
+    public OrganizationServiceImpl(@Qualifier("organizationDaoImpl")OrganizationDao organizationDao) {
+        this.organizationDao = organizationDao;
+    }
 
     /**
      * Поиск организации по айди. Внутри используется метод organizationDao.findOne

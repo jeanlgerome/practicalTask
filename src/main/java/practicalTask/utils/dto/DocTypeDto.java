@@ -1,6 +1,6 @@
 package practicalTask.utils.dto;
 
-import practicalTask.domain.DocType;
+import practicalTask.model.DocType;
 import practicalTask.utils.ArgChecker;
 
 public class DocTypeDto {

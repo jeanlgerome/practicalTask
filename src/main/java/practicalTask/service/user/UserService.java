@@ -1,6 +1,5 @@
 package practicalTask.service.user;
 
-import practicalTask.domain.User;
 import practicalTask.utils.dto.UserDto;
 
 import java.util.List;

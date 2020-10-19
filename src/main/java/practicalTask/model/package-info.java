@@ -1,4 +1,4 @@
 /**
  * This packages contains entities
  */
-package practicalTask.domain;
+package practicalTask.model;

@@ -1,6 +1,6 @@
 package practicalTask.utils.dto;
 
-import practicalTask.domain.Office;
+import practicalTask.model.Office;
 import practicalTask.utils.ArgChecker;
 
 

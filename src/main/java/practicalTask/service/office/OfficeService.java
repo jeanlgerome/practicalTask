@@ -1,6 +1,6 @@
 package practicalTask.service.office;
 
-import practicalTask.domain.Office;
+import practicalTask.model.Office;
 import practicalTask.utils.dto.OfficeDto;
 
 import java.util.List;

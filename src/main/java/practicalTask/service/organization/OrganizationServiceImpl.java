@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import practicalTask.dao.organization.OrganizationDao;
-import practicalTask.domain.Organization;
+import practicalTask.model.Organization;
 import practicalTask.utils.ArgChecker;
 import practicalTask.utils.dto.OrganizationDto;
 

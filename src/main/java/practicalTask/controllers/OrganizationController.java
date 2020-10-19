@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import practicalTask.domain.Organization;
+import practicalTask.model.Organization;
 import practicalTask.service.organization.OrganizationService;
 import practicalTask.utils.dto.OrganizationDto;
 import practicalTask.utils.response.DataContainer;

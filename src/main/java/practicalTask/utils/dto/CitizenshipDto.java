@@ -1,6 +1,6 @@
 package practicalTask.utils.dto;
 
-import practicalTask.domain.Citizenship;
+import practicalTask.model.Citizenship;
 import practicalTask.utils.ArgChecker;
 
 public class CitizenshipDto {

@@ -1,8 +1,8 @@
 package practicalTask.dao.office;
 
 import org.springframework.stereotype.Repository;
-import practicalTask.domain.Office;
-import practicalTask.domain.Organization;
+import practicalTask.model.Office;
+import practicalTask.model.Organization;
 import practicalTask.utils.ArgChecker;
 
 import javax.persistence.EntityManager;

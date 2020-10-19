@@ -1,7 +1,7 @@
 package practicalTask.dao.organization;
 
 import org.springframework.stereotype.Repository;
-import practicalTask.domain.Organization;
+import practicalTask.model.Organization;
 import practicalTask.utils.ArgChecker;
 
 import javax.persistence.EntityManager;

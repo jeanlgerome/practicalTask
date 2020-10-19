@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import practicalTask.domain.Office;
+import practicalTask.model.Office;
 import practicalTask.service.office.OfficeService;
 import practicalTask.utils.dto.OfficeDto;
 import practicalTask.utils.response.DataContainer;
@@ -12,10 +12,7 @@ import practicalTask.utils.response.ResultContainer;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Контроллер для обработки запросов связанных с офисами

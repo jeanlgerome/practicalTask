@@ -53,3 +53,4 @@ VALUES (3, 'Mark' , true, 'Yakovlevich', '3-3-3', 'Artist', 'Rothko', 0,  643, 3
 INSERT INTO usr (id,  first_name, is_identified, middle_name, phone, position, second_name, version,
                  citizenship_code, doc_concrete_number, office_id)
 VALUES (4, 'Honore ' , true, 'de', '4-4-4', 'DWriter', 'Balzac', 0,  250, 44-44-44, 3);
+

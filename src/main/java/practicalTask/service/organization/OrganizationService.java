@@ -1,6 +1,6 @@
 package practicalTask.service.organization;
 
-import practicalTask.domain.Organization;
+import practicalTask.model.Organization;
 import practicalTask.utils.dto.OrganizationDto;
 
 import java.util.List;

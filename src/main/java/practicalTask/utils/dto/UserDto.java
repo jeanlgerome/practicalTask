@@ -1,10 +1,8 @@
 package practicalTask.utils.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import practicalTask.domain.User;
+import practicalTask.model.User;
 import practicalTask.utils.ArgChecker;
-
-import javax.validation.constraints.NotBlank;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDto {

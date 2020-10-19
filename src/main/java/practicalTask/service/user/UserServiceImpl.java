@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import practicalTask.dao.office.OfficeDao;
 import practicalTask.dao.user.UserDao;
-import practicalTask.domain.User;
+import practicalTask.model.User;
 import practicalTask.service.handbookService.HandbookService;
 import practicalTask.utils.ArgChecker;
 import practicalTask.utils.dto.UserDto;

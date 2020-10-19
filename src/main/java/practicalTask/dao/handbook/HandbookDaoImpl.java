@@ -1,8 +1,8 @@
 package practicalTask.dao.handbook;
 
 import org.springframework.stereotype.Repository;
-import practicalTask.domain.Citizenship;
-import practicalTask.domain.DocType;
+import practicalTask.model.Citizenship;
+import practicalTask.model.DocType;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

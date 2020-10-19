@@ -1,7 +1,7 @@
 package practicalTask.dao.handbook;
 
-import practicalTask.domain.Citizenship;
-import practicalTask.domain.DocType;
+import practicalTask.model.Citizenship;
+import practicalTask.model.DocType;
 
 import java.util.List;
 

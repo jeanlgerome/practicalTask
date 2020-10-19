@@ -1,4 +1,4 @@
-package practicalTask.domain;
+package practicalTask.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -52,6 +52,7 @@ public class User {
     @NotNull
     private boolean isIdentified;
 
+    @MapsId("doc_number")
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "doc_concrete_number")
     private DocConcrete docConcrete;

@@ -1,7 +1,7 @@
 package practicalTask.dao.user;
 
 import org.springframework.stereotype.Repository;
-import practicalTask.domain.*;
+import practicalTask.model.*;
 import practicalTask.utils.ArgChecker;
 
 import javax.persistence.EntityManager;

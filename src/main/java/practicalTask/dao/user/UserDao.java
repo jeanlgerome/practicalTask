@@ -1,6 +1,6 @@
 package practicalTask.dao.user;
 
-import practicalTask.domain.User;
+import practicalTask.model.User;
 
 import java.util.List;
 

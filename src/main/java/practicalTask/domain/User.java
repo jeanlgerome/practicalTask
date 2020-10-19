@@ -52,8 +52,10 @@ public class User {
     @NotNull
     private boolean isIdentified;
 
+
+    @MapsId("doc_number")
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "doc_concrete_number", referencedColumnName = "doc_number")
+    @JoinColumn(name = "doc_concrete_number")
     private DocConcrete docConcrete;
 
 

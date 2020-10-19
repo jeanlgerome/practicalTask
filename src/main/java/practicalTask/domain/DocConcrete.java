@@ -34,6 +34,7 @@ public class DocConcrete {
     @JoinColumn(name = "doc_code", nullable = false)
     private DocType docType;
 
+
     @JsonIgnore
     @OneToOne(mappedBy = "docConcrete", cascade = CascadeType.ALL,
             fetch = FetchType.LAZY, optional = false)

@@ -1,18 +1,3 @@
-drop table usr if exists;
-
-drop table citizenship if exists;
-
-drop table doc_concrete if exists;
-
-drop table doc_type if exists;
-
-drop table office if exists;
-
-drop table organization if exists;
-
-drop sequence if exists hibernate_sequence;
-create sequence hibernate_sequence start with 4 increment by 1;
-
 
 create table IF NOT EXISTS citizenship
 (
@@ -95,6 +80,7 @@ create index IX_organization_name on organization (name);
 create index IX_organization_isActive on organization (is_active);
 alter table organization
   add constraint UX_organization_inn unique (inn);
+create index IX_usr_docConcrete on usr (doc_concrete_number);
 create index IX_usr_office on usr (office_id);
 create index IX_usr_firstName on usr (first_name);
 create index IX_usr_secondName on usr (second_name);

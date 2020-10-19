@@ -2,16 +2,17 @@ package practicalTask.service.handbookService;
 
 import practicalTask.domain.Citizenship;
 import practicalTask.domain.DocConcrete;
-import practicalTask.domain.DocType;
+import practicalTask.utils.dto.CitizenshipDto;
+import practicalTask.utils.dto.DocTypeDto;
 import practicalTask.utils.dto.UserDto;
 
 import java.util.List;
 
 public interface HandbookService {
 
-    List<DocType> getDocTypes();
+    List<DocTypeDto> getDocTypes();
 
-    List<Citizenship> getCitizenships();
+    List<CitizenshipDto> getCitizenships();
 
     DocConcrete parseDoc(UserDto userDto);
 

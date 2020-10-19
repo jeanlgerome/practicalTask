@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 import practicalTask.domain.Citizenship;
 import practicalTask.domain.DocType;
 import practicalTask.service.handbookService.HandbookService;
+import practicalTask.utils.dto.CitizenshipDto;
+import practicalTask.utils.dto.DocTypeDto;
 import practicalTask.utils.response.DataContainer;
 
 import java.util.List;
@@ -29,8 +31,8 @@ public class HandbookController {
      */
     @RequestMapping(method = RequestMethod.POST, value = "/api/docs")
     public DataContainer getDocTypes() {
-        List<DocType> docTypeList = handbookService.getDocTypes();
-        return new DataContainer(docTypeList);
+        List<DocTypeDto> docTypeDtoList = handbookService.getDocTypes();
+        return new DataContainer(docTypeDtoList);
     }
 
     /**
@@ -40,7 +42,7 @@ public class HandbookController {
      */
     @RequestMapping(method = RequestMethod.POST, value = "/api/countries")
     public DataContainer getCitizenships() {
-        List<Citizenship> citizenshipList = handbookService.getCitizenships();
-        return new DataContainer(citizenshipList);
+        List<CitizenshipDto> citizenshipDtoList = handbookService.getCitizenships();
+        return new DataContainer(citizenshipDtoList);
     }
 }

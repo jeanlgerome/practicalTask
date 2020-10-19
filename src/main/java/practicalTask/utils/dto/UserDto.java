@@ -1,22 +1,22 @@
 package practicalTask.utils.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import practicalTask.domain.User;
 import practicalTask.utils.ArgChecker;
 
 import javax.validation.constraints.NotBlank;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDto {
 
     private Long id;
 
-    @NotBlank
     private String firstName;
 
     private String secondName;
 
     private String middleName;
 
-    @NotBlank
     private String position;
 
     private String phone;
@@ -36,12 +36,27 @@ public class UserDto {
     public UserDto() {
     }
 
+    /**
+     * Конструктор. Используется в сервисе при передаче результата поиска с заданными парамтреами
+     */
+    public UserDto( String firstName, String secondName, String middleName, String position, Long docCode, Long citizenshipCode) {
+        this.firstName = ArgChecker.requireNonBlank(firstName, "firstName");
+        this.secondName = secondName;
+        this.middleName = middleName;
+        this.position = ArgChecker.requireNonBlank(position, "position");
+        this.docCode = docCode;
+        this.citizenshipCode = citizenshipCode;
+    }
+
+    /**
+     * Конструктор. Используется  при передаче данных из контроллера в сервис
+     */
     public UserDto(Long id, String firstName, String secondName, String middleName, String position, String phone, Long docCode, String docName, String docNumber, String docDate, Long citizenshipCode, boolean isIdentified) {
         this.id = id;
         this.firstName = ArgChecker.requireNonBlank(firstName, "firstName");
         this.secondName = secondName;
         this.middleName = middleName;
-        this.position = ArgChecker.requireNonBlank(position, "firstName");
+        this.position = ArgChecker.requireNonBlank(position, "position");
         this.phone = phone;
         this.docCode = docCode;
         this.docName = docName;
@@ -51,6 +66,9 @@ public class UserDto {
         this.isIdentified = isIdentified;
     }
 
+    /**
+     * Конструктор. Используется в сервисе при передаче результата поиска по айди
+     */
     public UserDto(User userFromDb) {
         ArgChecker.requireNonNull(userFromDb, "userFromDb");
         this.id = userFromDb.getId();

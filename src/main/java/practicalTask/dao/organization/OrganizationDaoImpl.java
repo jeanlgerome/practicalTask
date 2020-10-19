@@ -33,7 +33,11 @@ public class OrganizationDaoImpl implements OrganizationDao {
     @Override
     public Organization findOne(Long id) {
         ArgChecker.requireNonNull(id, "id");
-        return entityManager.find(Organization.class, id);
+        Organization organization = entityManager.find(Organization.class, id);
+        if (organization == null) {
+            throw new IllegalArgumentException("Organization not found");
+        }
+        return organization;
     }
 
     /**
@@ -88,7 +92,6 @@ public class OrganizationDaoImpl implements OrganizationDao {
      */
 
     @Override
-    @Transactional
     public void save(Organization organization) {
         ArgChecker.requireNonNull(organization, "organization");
         entityManager.persist(organization);
@@ -102,7 +105,6 @@ public class OrganizationDaoImpl implements OrganizationDao {
      * @throws IllegalArgumentException если organization == null
      */
     @Override
-    @Transactional
     public Organization update(Organization organization) {
         ArgChecker.requireNonNull(organization, "organization");
         return entityManager.merge(organization);

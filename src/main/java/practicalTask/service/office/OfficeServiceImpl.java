@@ -3,12 +3,16 @@ package practicalTask.service.office;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import practicalTask.dao.office.OfficeDao;
+import practicalTask.dao.organization.OrganizationDao;
 import practicalTask.domain.Office;
 import practicalTask.domain.Organization;
 import practicalTask.service.organization.OrganizationService;
 import practicalTask.utils.ArgChecker;
+import practicalTask.utils.dto.OfficeDto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,28 +22,22 @@ public class OfficeServiceImpl implements OfficeService {
     @Qualifier("officeDaoImpl")
     OfficeDao officeDao;
     @Autowired
-    @Qualifier("organizationServiceImpl")
-    OrganizationService organizationService;
+    @Qualifier("organizationDaoImpl")
+    OrganizationDao organizationDao;
 
     /**
      * Поиск офиса по айди
-     * Полученный результат проверяется на пустоту
      *
      * @param id айди офиса
      * @return офис с айди = id
-     * @throws IllegalArgumentException, если такой офис не найден
      * @see OfficeDao
      */
     @Override
-    public Office getOffice(Long id) {
+    public OfficeDto getOffice(Long id) {
+        ArgChecker.requireNonNull(id, "id");
         Office office = officeDao.findOne(id);
-
-        if (office == null) {
-            throw new IllegalArgumentException("Office not found");
-        }
-        return office;
+        return new OfficeDto(office);
     }
-
 
     /**
      * Поиск офисов по параметрам
@@ -53,10 +51,15 @@ public class OfficeServiceImpl implements OfficeService {
      * @see OfficeDao
      */
     @Override
-    public List<Office> getOfficeList(Long orgId, String name, String phone, boolean isActive) {
-        organizationService.getOrganization(orgId);
+    public List<OfficeDto> getOfficeList(Long orgId, String name, String phone, boolean isActive) {
+        ArgChecker.requireNonNull(orgId, "orgId");
+        organizationDao.findOne(orgId);
         List<Office> officeList = officeDao.findAll(orgId, name, phone, isActive);
-        return officeList;
+        List<OfficeDto> dtoList = new ArrayList<>();
+        for (Office office : officeList) {
+            dtoList.add(new OfficeDto(office));
+        }
+        return dtoList;
     }
 
     /**
@@ -70,10 +73,11 @@ public class OfficeServiceImpl implements OfficeService {
      */
 
     @Override
+    @Transactional
     public void save(Long orgId, Office office) {
         ArgChecker.requireNonNull(office, "office");
         ArgChecker.requireNonNull(orgId, "orgId");
-        Organization organization = organizationService.getOrganization(orgId);
+        Organization organization =  organizationDao.findOne(orgId);
         office.setOrganization(organization);
         officeDao.save(office);
     }
@@ -87,10 +91,11 @@ public class OfficeServiceImpl implements OfficeService {
      * @see OfficeDao
      */
     @Override
+    @Transactional
     public void update(Long officeId, Office newOfficeData) {
         ArgChecker.requireNonNull(officeId, "officeId");
         ArgChecker.requireNonNull(newOfficeData, "office");
-        Office oldOffice = getOffice(officeId);
+        Office oldOffice = officeDao.findOne(officeId);
         oldOffice.update(newOfficeData);
         officeDao.update(oldOffice);
     }

@@ -3,10 +3,13 @@ package practicalTask.service.organization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import practicalTask.dao.organization.OrganizationDao;
 import practicalTask.domain.Organization;
 import practicalTask.utils.ArgChecker;
+import practicalTask.utils.dto.OrganizationDto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,22 +27,16 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     /**
      * Поиск организации по айди. Внутри используется метод organizationDao.findOne
-     * Полученный результат проверяется на пустоту
      *
      * @param id айди организации
      * @return организацию с айди = id
-     * @throws IllegalArgumentException, если такая организация не найдена
      * @see OrganizationDao
      */
     @Override
-    public Organization getOrganization(Long id) {
+    public OrganizationDto getOrganization(Long id) {
         ArgChecker.requireNonNull(id, "id");
         Organization organization = organizationDao.findOne(id);
-
-        if (organization == null) {
-            throw new IllegalArgumentException("Organization not found");
-        }
-        return organization;
+        return new OrganizationDto(organization);
     }
 
     /**
@@ -54,11 +51,15 @@ public class OrganizationServiceImpl implements OrganizationService {
      * @see OrganizationDao
      */
     @Override
-    public List<Organization> getOrganizationList(String name, String inn, boolean isActive) {
+    public List<OrganizationDto> getOrganizationList(String name, String inn, boolean isActive) {
         ArgChecker.requireNonBlank(name, "name");
         List<Organization> organizationList;
         organizationList = organizationDao.findAll(name, inn, isActive);
-        return organizationList;
+        List<OrganizationDto> dtoList = new ArrayList<>();
+        for (Organization org: organizationList) {
+            dtoList.add(new OrganizationDto(org.getName(), org.getInn(), org.isActive()));
+        }
+        return dtoList;
     }
 
     /**
@@ -71,6 +72,7 @@ public class OrganizationServiceImpl implements OrganizationService {
      */
 
     @Override
+    @Transactional
     public void save(Organization organization) {
         ArgChecker.requireNonNull(organization, "organization");
         organizationDao.save(organization);
@@ -86,11 +88,12 @@ public class OrganizationServiceImpl implements OrganizationService {
      * @see OrganizationDao
      */
     @Override
+    @Transactional
     public void update(Long orgId, Organization newOrganizationData) {
         ArgChecker.requireNonNull(orgId, "orgId");
         ArgChecker.requireNonNull(newOrganizationData, "newOrganizationData");
-        Organization organizationOld = getOrganization(orgId);
-        organizationOld.updateData(newOrganizationData);
-        organizationDao.update(organizationOld);
+        Organization oldOrganization = organizationDao.findOne(orgId);
+        oldOrganization.updateData(newOrganizationData);
+        organizationDao.update(oldOrganization);
     }
 }

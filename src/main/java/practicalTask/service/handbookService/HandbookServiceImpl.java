@@ -8,10 +8,13 @@ import practicalTask.domain.Citizenship;
 import practicalTask.domain.DocConcrete;
 import practicalTask.domain.DocType;
 import practicalTask.utils.ArgChecker;
+import practicalTask.utils.dto.CitizenshipDto;
+import practicalTask.utils.dto.DocTypeDto;
 import practicalTask.utils.dto.UserDto;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,20 +28,29 @@ public class HandbookServiceImpl implements HandbookService {
     HandbookDao handbookDao;
 
     /**
-     * @return все типы документов
+     * @return dto всех типов документов
      */
     @Override
-    public List<DocType> getDocTypes() {
+    public List<DocTypeDto> getDocTypes() {
         List<DocType> docTypeList = handbookDao.findAllDocTypes();
-        return docTypeList;
+        List<DocTypeDto> dtoList = new ArrayList<>();
+        for (DocType docType: docTypeList) {
+            dtoList.add(new DocTypeDto(docType));
+        }
+        return dtoList;
     }
 
     /**
-     * @return все гражданства
+     * @return dto всех гражданств
      */
     @Override
-    public List<Citizenship> getCitizenships() {
-        return handbookDao.findAllCitizenships();
+    public List<CitizenshipDto> getCitizenships() {
+        List<Citizenship> citizenshipList = handbookDao.findAllCitizenships();
+        List<CitizenshipDto> dtoList = new ArrayList<>();
+        for (Citizenship citizenship: citizenshipList) {
+            dtoList.add(new CitizenshipDto(citizenship));
+        }
+        return dtoList;
     }
 
     /**

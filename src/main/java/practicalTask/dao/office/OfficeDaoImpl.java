@@ -1,7 +1,6 @@
 package practicalTask.dao.office;
 
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import practicalTask.domain.Office;
 import practicalTask.domain.Organization;
 import practicalTask.utils.ArgChecker;
@@ -25,12 +24,17 @@ public class OfficeDaoImpl implements OfficeDao {
      *
      * @param id параметр поиска офиса
      * @return офис с требуемым айди
-     * @throws IllegalArgumentException если id == null
+     * @throws IllegalArgumentException  если id == null
+     * @throws IllegalArgumentException, если такой офис не найден
      */
     @Override
     public Office findOne(Long id) {
         ArgChecker.requireNonNull(id, "id");
-        return entityManager.find(Office.class, id);
+        Office office = entityManager.find(Office.class, id);
+        if (office == null) {
+            throw new IllegalArgumentException("Office not found");
+        }
+        return office;
     }
 
     /**
@@ -75,7 +79,6 @@ public class OfficeDaoImpl implements OfficeDao {
      * @throws IllegalArgumentException если office == null
      */
     @Override
-    @Transactional
     public void save(Office office) {
         ArgChecker.requireNonNull(office, "office");
         entityManager.persist(office);
@@ -89,7 +92,6 @@ public class OfficeDaoImpl implements OfficeDao {
      * @throws IllegalArgumentException если office == null
      */
     @Override
-    @Transactional
     public Office update(Office office) {
         ArgChecker.requireNonNull(office, "office");
         return entityManager.merge(office);

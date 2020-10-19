@@ -6,6 +6,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import practicalTask.domain.Organization;
 import practicalTask.service.organization.OrganizationService;
+import practicalTask.utils.dto.OrganizationDto;
 import practicalTask.utils.response.DataContainer;
 import practicalTask.utils.response.ResultContainer;
 
@@ -37,7 +38,7 @@ public class OrganizationController {
      */
     @RequestMapping(method = RequestMethod.GET, value = "/api/organization/{id}")
     public DataContainer getOrganization(@PathVariable @NotNull final Long id) {
-        Organization organization = organizationService.getOrganization(id);
+        OrganizationDto organization = organizationService.getOrganization(id);
         return new DataContainer(organization);
     }
 
@@ -56,16 +57,8 @@ public class OrganizationController {
                                              @RequestParam(required = false) String inn,
                                              @RequestParam(required = false, defaultValue = "true") boolean isActive) {
 
-        List<Organization> organizationList = organizationService.getOrganizationList(name, inn, isActive);
-        List<Map<String, String>> output = new ArrayList<>();
-        for (Organization org : organizationList) {
-            Map<String, String> orgInfo = new LinkedHashMap<>();
-            orgInfo.put("name", org.getName());
-            orgInfo.put("id", org.getId().toString());
-            orgInfo.put("isActive", Boolean.toString(org.isActive()));
-            output.add(orgInfo);
-        }
-        return new DataContainer(output);
+        List<OrganizationDto> organizationList = organizationService.getOrganizationList(name, inn, isActive);
+        return new DataContainer(organizationList);
     }
 
     /**

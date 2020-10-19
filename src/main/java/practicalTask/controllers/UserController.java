@@ -62,18 +62,8 @@ public class UserController {
                                      @RequestParam(required = false) String lastName, @RequestParam(required = false) String middleName,
                                      @RequestParam(required = false) String position, @RequestParam(required = false) String docCode,
                                      @RequestParam(required = false) String citizenshipCode) {
-        List<User> userList = userService.getUserList(officeId, firstName, lastName, middleName, position, docCode, citizenshipCode);
-        List<Map<String, String>> output = new ArrayList<>();
-        for (User user : userList) {
-            Map<String, String> userInfo = new LinkedHashMap<>();
-            userInfo.put("id", user.getId().toString());
-            userInfo.put("firstName", user.getFirstName());
-            userInfo.put("secondName", user.getSecondName());
-            userInfo.put("middleName", user.getMiddleName());
-            userInfo.put("position", user.getPosition());
-            output.add(userInfo);
-        }
-        return new DataContainer(output);
+        List<UserDto> userList = userService.getUserList(officeId, firstName, lastName, middleName, position, docCode, citizenshipCode);
+        return new DataContainer(userList);
 
     }
 

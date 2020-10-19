@@ -1,4 +1,6 @@
 
+
+
 create table IF NOT EXISTS citizenship
 (
   citizenship_code bigint       not null, -- Код страны

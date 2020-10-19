@@ -6,6 +6,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import practicalTask.domain.Office;
 import practicalTask.service.office.OfficeService;
+import practicalTask.utils.dto.OfficeDto;
 import practicalTask.utils.response.DataContainer;
 import practicalTask.utils.response.ResultContainer;
 
@@ -37,7 +38,7 @@ public class OfficeController {
      */
     @RequestMapping(method = RequestMethod.GET, value = "/api/office/{id}")
     public DataContainer getOffice(@PathVariable @NotNull final Long id) {
-        Office office = officeService.getOffice(id);
+        OfficeDto office = officeService.getOffice(id);
         return new DataContainer(office);
     }
 
@@ -56,16 +57,8 @@ public class OfficeController {
     public DataContainer getOfficeList(@RequestParam @NotNull Long orgId, @RequestParam(required = false) String name,
                                        @RequestParam(required = false) String phone,
                                        @RequestParam(required = false) boolean isActive) {
-        List<Office> officeList = officeService.getOfficeList(orgId, name, phone, isActive);
-        List<Map<String, String>> output = new ArrayList<>();
-        for (Office office : officeList) {
-            Map<String, String> officeInfo = new LinkedHashMap<>();
-            officeInfo.put("id", office.getId().toString());
-            officeInfo.put("name", office.getName());
-            officeInfo.put("isActive", Boolean.toString(office.isActive()));
-            output.add(officeInfo);
-        }
-        return new DataContainer(output);
+        List<OfficeDto> officeList = officeService.getOfficeList(orgId, name, phone, isActive);
+        return new DataContainer(officeList);
     }
 
     /**

@@ -25,12 +25,17 @@ public class UserDaoImpl implements UserDao {
      * @param id айди
      * @return пользователь с требуемым айди
      * @throws IllegalArgumentException если id == null
+     * @throws IllegalArgumentException если такой пользователь не найден
+     *  @throws IllegalArgumentException, если такая организация не найдена
      */
     @Transactional
     @Override
     public User findOne(Long id) {
         ArgChecker.requireNonNull(id, "id");
         User user = entityManager.find(User.class, id);
+        if (user == null) {
+            throw new IllegalArgumentException("User not found");
+        }
         return user;
     }
 
@@ -100,7 +105,6 @@ public class UserDaoImpl implements UserDao {
      * @throws IllegalArgumentException если user == null
      */
     @Override
-    @Transactional
     public void save(User user) {
         ArgChecker.requireNonNull(user, "user");
         entityManager.persist(user);
@@ -114,7 +118,6 @@ public class UserDaoImpl implements UserDao {
      * @throws IllegalArgumentException если user == null
      */
     @Override
-    @Transactional
     public User update(User user) {
         ArgChecker.requireNonNull(user, "user");
         return entityManager.merge(user);

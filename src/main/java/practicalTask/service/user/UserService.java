@@ -10,7 +10,7 @@ public interface UserService {
 
     UserDto getUser(Long id);
 
-    List<User> getUserList(Long officeId, String firstName, String lastName, String middleName, String position,
+    List<UserDto> getUserList(Long officeId, String firstName, String lastName, String middleName, String position,
                            String docCode, String citizenshipCode);
 
     void save(Long officeId, UserDto userDto);

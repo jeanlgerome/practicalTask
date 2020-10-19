@@ -1,7 +1,6 @@
 package practicalTask.dao.user;
 
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import practicalTask.domain.*;
 import practicalTask.utils.ArgChecker;
 
@@ -24,11 +23,11 @@ public class UserDaoImpl implements UserDao {
      *
      * @param id айди
      * @return пользователь с требуемым айди
-     * @throws IllegalArgumentException если id == null
-     * @throws IllegalArgumentException если такой пользователь не найден
-     *  @throws IllegalArgumentException, если такая организация не найдена
+     * @throws IllegalArgumentException  если id == null
+     * @throws IllegalArgumentException  если такой пользователь не найден
+     * @throws IllegalArgumentException, если такая организация не найдена
      */
-    @Transactional
+
     @Override
     public User findOne(Long id) {
         ArgChecker.requireNonNull(id, "id");

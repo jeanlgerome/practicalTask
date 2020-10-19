@@ -1,7 +1,6 @@
 package practicalTask.dao.organization;
 
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import practicalTask.domain.Organization;
 import practicalTask.utils.ArgChecker;
 

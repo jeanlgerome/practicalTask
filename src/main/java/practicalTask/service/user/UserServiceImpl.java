@@ -9,7 +9,8 @@ import practicalTask.dao.user.UserDao;
 import practicalTask.model.User;
 import practicalTask.service.handbookService.HandbookService;
 import practicalTask.utils.ArgChecker;
-import practicalTask.utils.dto.UserDto;
+import practicalTask.utils.dto.user.UserDto;
+import practicalTask.utils.dto.user.UserListDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,14 +60,14 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public List<UserDto> getUserList(Long officeId, String firstName, String lastName, String middleName, String position,
+    public List<UserListDto> getUserList(Long officeId, String firstName, String lastName, String middleName, String position,
                                      String docCode, String citizenshipCode) {
         ArgChecker.requireNonNull(officeId, "officeId");
         officeDao.findOne(officeId);
         List<User> userList = userDao.findAll(officeId, firstName, lastName, middleName, position, docCode, citizenshipCode);
-        List<UserDto> dtoList = new ArrayList<>();
+        List<UserListDto> dtoList = new ArrayList<>();
         for (User user : userList) {
-            dtoList.add(new UserDto(user.getFirstName(), user.getSecondName(), user.getMiddleName(), user.getPosition(), user.getDocCode(), user.getCitizenshipCode()));
+            dtoList.add(new UserListDto(user.getFirstName(), user.getSecondName(), user.getMiddleName(), user.getPosition(), user.getDocCode(), user.getCitizenshipCode()));
         }
         return dtoList;
     }
@@ -82,7 +83,8 @@ public class UserServiceImpl implements UserService {
     public void save(Long officeId, UserDto userDto) {
         ArgChecker.requireNonNull(officeId, "officeId");
         ArgChecker.requireNonNull(userDto, "userDto");
-        User newUser = new User(userDto);
+        User newUser = new User();
+        newUser.update(userDto);
         newUser.setDocConcrete(handbookService.parseDoc(userDto));
         newUser.setCitizenship(handbookService.parseCitizenship(userDto));
         newUser.setOffice(officeDao.findOne(officeId));

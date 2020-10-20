@@ -10,7 +10,8 @@ import practicalTask.model.Office;
 import practicalTask.model.Organization;
 import practicalTask.service.organization.OrganizationService;
 import practicalTask.utils.ArgChecker;
-import practicalTask.utils.dto.OfficeDto;
+import practicalTask.utils.dto.office.OfficeDto;
+import practicalTask.utils.dto.office.OfficeListDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,13 +55,13 @@ public class OfficeServiceImpl implements OfficeService {
      * @see OfficeDao
      */
     @Override
-    public List<OfficeDto> getOfficeList(Long orgId, String name, String phone, boolean isActive) {
+    public List<OfficeListDto> getOfficeList(Long orgId, String name, String phone, boolean isActive) {
         ArgChecker.requireNonNull(orgId, "orgId");
         organizationDao.findOne(orgId);
         List<Office> officeList = officeDao.findAll(orgId, name, phone, isActive);
-        List<OfficeDto> dtoList = new ArrayList<>();
+        List<OfficeListDto> dtoList = new ArrayList<>();
         for (Office office : officeList) {
-            dtoList.add(new OfficeDto(office));
+            dtoList.add(new OfficeListDto(office.getId(), office.getName(), office.isActive()));
         }
         return dtoList;
     }
@@ -69,7 +70,7 @@ public class OfficeServiceImpl implements OfficeService {
      * Сохраняет новый офис
      *
      * @param orgId  айди организации
-     * @param office новый офис
+     * @param officeDto данные нового офиса
      * @throws IllegalArgumentException, если нет organization с таким айди или входные параметры пусты
      * @see OfficeDao
      * @see OrganizationService
@@ -77,12 +78,14 @@ public class OfficeServiceImpl implements OfficeService {
 
     @Override
     @Transactional
-    public void save(Long orgId, Office office) {
-        ArgChecker.requireNonNull(office, "office");
+    public void save(Long orgId, OfficeDto officeDto) {
+        ArgChecker.requireNonNull(officeDto, "office");
         ArgChecker.requireNonNull(orgId, "orgId");
         Organization organization = organizationDao.findOne(orgId);
-        office.setOrganization(organization);
-        officeDao.save(office);
+        Office newOffice = new Office();
+        newOffice.update(officeDto);
+        newOffice.setOrganization(organization);
+        officeDao.save(newOffice);
     }
 
     /**
@@ -95,7 +98,7 @@ public class OfficeServiceImpl implements OfficeService {
      */
     @Override
     @Transactional
-    public void update(Long officeId, Office newOfficeData) {
+    public void update(Long officeId, OfficeDto newOfficeData) {
         ArgChecker.requireNonNull(officeId, "officeId");
         ArgChecker.requireNonNull(newOfficeData, "office");
         Office oldOffice = officeDao.findOne(officeId);

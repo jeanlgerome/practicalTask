@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import practicalTask.service.handbookService.HandbookService;
-import practicalTask.utils.dto.CitizenshipDto;
-import practicalTask.utils.dto.DocTypeDto;
+import practicalTask.utils.dto.handbook.CitizenshipDto;
+import practicalTask.utils.dto.handbook.DocTypeDto;
 import practicalTask.utils.response.DataContainer;
 
 import java.util.List;

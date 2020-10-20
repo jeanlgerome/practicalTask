@@ -4,7 +4,7 @@ package practicalTask.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.validator.constraints.Length;
 import practicalTask.utils.Constants;
-import practicalTask.utils.dto.UserDto;
+import practicalTask.utils.dto.user.UserDto;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -73,16 +73,6 @@ public class User {
         this.phone = phone;
         this.isIdentified = isIdentified;
     }
-
-    public User(UserDto userDto) {
-        this.firstName = userDto.getFirstName();
-        this.secondName = userDto.getSecondName();
-        this.middleName = userDto.getMiddleName();
-        this.position = userDto.getPosition();
-        this.phone = userDto.getPhone();
-        this.isIdentified = userDto.isIdentified();
-    }
-
 
     public void update(UserDto newUserData) {
         this.firstName = newUserData.getFirstName();

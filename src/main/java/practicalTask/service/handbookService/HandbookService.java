@@ -2,9 +2,9 @@ package practicalTask.service.handbookService;
 
 import practicalTask.model.Citizenship;
 import practicalTask.model.DocConcrete;
-import practicalTask.utils.dto.CitizenshipDto;
-import practicalTask.utils.dto.DocTypeDto;
-import practicalTask.utils.dto.UserDto;
+import practicalTask.utils.dto.handbook.CitizenshipDto;
+import practicalTask.utils.dto.handbook.DocTypeDto;
+import practicalTask.utils.dto.user.UserDto;
 
 import java.util.List;
 

@@ -1,12 +1,11 @@
 package practicalTask.model;
 
 import org.hibernate.validator.constraints.Length;
-import practicalTask.controllers.OrganizationController;
 import practicalTask.utils.Constants;
+import practicalTask.utils.dto.organization.OrganizationDto;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -68,31 +67,6 @@ public class Organization {
             mappedBy = "organization")
     private Set<Office> officeSet;
 
-    /**
-     * Конструктор, используется в контроллере OrganizationController в методе saveNewOrganization
-     * В него передаются пареметры из POST запроса, затем сущность сохраняется
-     *
-     * @param name
-     * @param fullName
-     * @param inn
-     * @param kpp
-     * @param adress
-     * @param phone
-     * @param isActive
-     * @throws IllegalArgumentException если обнаружены некооректные параметры
-     * @see OrganizationController
-     */
-    public Organization(String name, String fullName, String inn, String kpp, String adress, String phone, boolean isActive) {
-        this.name = name;
-        this.fullName = fullName;
-        this.inn = inn;
-        this.kpp = kpp;
-        this.adress = adress;
-        this.phone = phone;
-        this.isActive = isActive;
-        this.officeSet = new HashSet<>();
-    }
-
     public Organization() {
     }
 
@@ -102,14 +76,14 @@ public class Organization {
      * @param newData объект с новыми данными
      * @throws IllegalArgumentException если обнаружены некооректные данные
      */
-    public void updateData(Organization newData) {
-        this.name = newData.name;
-        this.fullName = newData.fullName;
-        this.inn = newData.inn;
-        this.kpp = newData.kpp;
-        this.adress = newData.adress;
-        this.phone = newData.phone;
-        this.isActive = newData.isActive;
+    public void updateData(OrganizationDto newData) {
+        this.name = newData.getName();
+        this.fullName = newData.getFullName();
+        this.inn = newData.getInn();
+        this.kpp = newData.getKpp();
+        this.adress = newData.getAdress();
+        this.phone = newData.getPhone();
+        this.isActive = newData.isActive();
     }
 
     public Long getId() {

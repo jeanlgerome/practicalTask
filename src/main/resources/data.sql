@@ -1,4 +1,3 @@
-
 INSERT INTO citizenship (citizenship_code,citizenship_name)
 VALUES (643, 'Российская Федерация');
 INSERT INTO citizenship (citizenship_code,citizenship_name)
@@ -7,6 +6,7 @@ INSERT INTO citizenship (citizenship_code,citizenship_name)
 VALUES (840, 'Соединенные Штаты Америки');
 INSERT INTO citizenship (citizenship_code,citizenship_name)
 VALUES (250, 'Французская Республика');
+
 
 INSERT INTO doc_type (doc_code,doc_name)
 VALUES (03, 'Свидетельство о рождении');
@@ -42,15 +42,14 @@ INSERT INTO office (id,  adress, is_active, name, phone, version, organization_i
 VALUES (3, 'Prague', true, 'JetBrains Office', '333-333', 0, 3);
 
 INSERT INTO usr (id,  first_name, is_identified, middle_name, phone, position, second_name, version,
-                 citizenship_code, doc_number, office_id)
+                 citizenship_code, doc_concrete_doc_number, office_id)
 VALUES (1, 'Elon' , true, 'Reeve', '2-2-2', 'Chief designer', 'Musk', 0,  840, 22-22-22, 1);
 INSERT INTO usr (id,  first_name, is_identified, middle_name, phone, position, second_name, version,
-                 citizenship_code, doc_number, office_id)
+                 citizenship_code, doc_concrete_doc_number, office_id)
 VALUES (2, 'John' , true, 'Henry', '1-1-1', 'Drummer', 'Bonham', 0,  826, 11-11-11, 2);
 INSERT INTO usr (id,  first_name, is_identified, middle_name, phone, position, second_name, version,
-                 citizenship_code, doc_number, office_id)
+                 citizenship_code, doc_concrete_doc_number, office_id)
 VALUES (3, 'Mark' , true, 'Yakovlevich', '3-3-3', 'Artist', 'Rothko', 0,  643, 33-33-33, 3);
 INSERT INTO usr (id,  first_name, is_identified, middle_name, phone, position, second_name, version,
-                 citizenship_code, doc_number, office_id)
+                 citizenship_code, doc_concrete_doc_number, office_id)
 VALUES (4, 'Honore ' , true, 'de', '4-4-4', 'DWriter', 'Balzac', 0,  250, 44-44-44, 3);
-

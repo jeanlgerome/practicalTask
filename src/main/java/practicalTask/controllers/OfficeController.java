@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import practicalTask.model.Office;
 import practicalTask.service.office.OfficeService;
-import practicalTask.utils.dto.OfficeDto;
+import practicalTask.utils.dto.office.OfficeDto;
+import practicalTask.utils.dto.office.OfficeListDto;
 import practicalTask.utils.response.DataContainer;
 import practicalTask.utils.response.ResultContainer;
 
@@ -57,7 +57,7 @@ public class OfficeController {
     public DataContainer getOfficeList(@RequestParam @NotNull Long orgId, @RequestParam(required = false) String name,
                                        @RequestParam(required = false) String phone,
                                        @RequestParam(required = false) boolean isActive) {
-        List<OfficeDto> officeList = officeService.getOfficeList(orgId, name, phone, isActive);
+        List<OfficeListDto> officeList = officeService.getOfficeList(orgId, name, phone, isActive);
         return new DataContainer(officeList);
     }
 
@@ -69,7 +69,7 @@ public class OfficeController {
      * @return ResultContainer с сообщением success, если операция прошла успешно
      */
     @RequestMapping(method = RequestMethod.POST, value = "/api/office/save")
-    public ResultContainer saveNewOffice(@RequestParam @NotNull Long orgId, Office newOffice) {
+    public ResultContainer saveNewOffice(@RequestParam @NotNull Long orgId, OfficeDto newOffice) {
         officeService.save(orgId, newOffice);
         return new ResultContainer("success");
     }
@@ -88,8 +88,12 @@ public class OfficeController {
     public ResultContainer updateOffice(@RequestParam Long id, @RequestParam @NotBlank String name,
                                         @RequestParam @NotBlank String address, @RequestParam(required = false) String phone,
                                         @RequestParam(defaultValue = "true") boolean isActive) {
-        Office office = new Office(name, address, phone, isActive);
-        officeService.update(id, office);
+        OfficeDto officeDto = new OfficeDto();
+        officeDto.setName(name);
+        officeDto.setAdress(address);
+        officeDto.setPhone(phone);
+        officeDto.setActive(isActive);
+        officeService.update(id, officeDto);
         return new ResultContainer("success");
     }
 }

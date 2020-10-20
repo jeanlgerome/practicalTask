@@ -6,7 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import practicalTask.service.user.UserService;
-import practicalTask.utils.dto.UserDto;
+import practicalTask.utils.dto.user.UserDto;
+import practicalTask.utils.dto.user.UserListDto;
 import practicalTask.utils.response.DataContainer;
 import practicalTask.utils.response.ResultContainer;
 
@@ -24,7 +25,7 @@ public class UserController {
     private final UserService userService;
 
     @Autowired
-    public UserController(@Qualifier("userServiceImpl") UserService userService){
+    public UserController(@Qualifier("userServiceImpl") UserService userService) {
         this.userService = userService;
     }
 
@@ -61,7 +62,7 @@ public class UserController {
                                      @RequestParam(required = false) String lastName, @RequestParam(required = false) String middleName,
                                      @RequestParam(required = false) String position, @RequestParam(required = false) String docCode,
                                      @RequestParam(required = false) String citizenshipCode) {
-        List<UserDto> userList = userService.getUserList(officeId, firstName, lastName, middleName, position, docCode, citizenshipCode);
+        List<UserListDto> userList = userService.getUserList(officeId, firstName, lastName, middleName, position, docCode, citizenshipCode);
         return new DataContainer(userList);
 
     }

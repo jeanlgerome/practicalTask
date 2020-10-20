@@ -4,6 +4,7 @@ package practicalTask.model;
 import org.hibernate.validator.constraints.Length;
 
 import practicalTask.utils.Constants;
+import practicalTask.utils.dto.office.OfficeDto;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -53,18 +54,11 @@ public class Office {
     public Office() {
     }
 
-    public Office(String name, String adress, String phone, boolean isActive) {
-        this.name = name;
-        this.adress = adress;
-        this.phone = phone;
-        this.isActive = isActive;
-    }
-
-    public void update(Office newData) {
-        this.name = newData.name;
-        this.adress = newData.adress;
-        this.phone = newData.phone;
-        this.isActive = newData.isActive;
+    public void update(OfficeDto newData) {
+        this.name = newData.getName();
+        this.adress = newData.getAdress();
+        this.phone = newData.getPhone();
+        this.isActive = newData.isActive();
     }
 
     public Long getId() {

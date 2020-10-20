@@ -30,9 +30,9 @@ public class DocConcrete {
     @JoinColumn(name = "doc_code", nullable = false)
     private DocType docType;
 
-    @MapsId("usr_doc_number")
+    @MapsId("doc_number")
     @OneToOne(mappedBy = "docConcrete", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY, optional = false)
+            fetch = FetchType.LAZY)
     private User user;
 
     public DocConcrete() {

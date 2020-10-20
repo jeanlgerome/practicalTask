@@ -7,7 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import practicalTask.dao.organization.OrganizationDao;
 import practicalTask.model.Organization;
 import practicalTask.utils.ArgChecker;
-import practicalTask.utils.dto.OrganizationDto;
+import practicalTask.utils.dto.organization.OrganizationDto;
+import practicalTask.utils.dto.organization.OrganizationListDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,13 +55,13 @@ public class OrganizationServiceImpl implements OrganizationService {
      * @see OrganizationDao
      */
     @Override
-    public List<OrganizationDto> getOrganizationList(String name, String inn, boolean isActive) {
+    public List<OrganizationListDto> getOrganizationList(String name, String inn, boolean isActive) {
         ArgChecker.requireNonBlank(name, "name");
         List<Organization> organizationList;
         organizationList = organizationDao.findAll(name, inn, isActive);
-        List<OrganizationDto> dtoList = new ArrayList<>();
+        List<OrganizationListDto> dtoList = new ArrayList<>();
         for (Organization org: organizationList) {
-            dtoList.add(new OrganizationDto(org.getName(), org.getInn(), org.isActive()));
+            dtoList.add(new OrganizationListDto(org.getName(), org.getInn(), org.isActive()));
         }
         return dtoList;
     }
@@ -69,15 +70,17 @@ public class OrganizationServiceImpl implements OrganizationService {
      * Сохраняет новую организацию
      * Внутри используется метод organizationDao.save
      *
-     * @param organization новая организацая
+     * @param organizationDto данные новой организации
      * @throws IllegalArgumentException, если organization пуста
      * @see OrganizationDao
      */
 
     @Override
     @Transactional
-    public void save(Organization organization) {
-        ArgChecker.requireNonNull(organization, "organization");
+    public void save(OrganizationDto organizationDto) {
+        ArgChecker.requireNonNull(organizationDto, "organization");
+        Organization organization = new Organization();
+        organization.updateData(organizationDto);
         organizationDao.save(organization);
     }
 
@@ -92,7 +95,7 @@ public class OrganizationServiceImpl implements OrganizationService {
      */
     @Override
     @Transactional
-    public void update(Long orgId, Organization newOrganizationData) {
+    public void update(Long orgId, OrganizationDto newOrganizationData) {
         ArgChecker.requireNonNull(orgId, "orgId");
         ArgChecker.requireNonNull(newOrganizationData, "newOrganizationData");
         Organization oldOrganization = organizationDao.findOne(orgId);

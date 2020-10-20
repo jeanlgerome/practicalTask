@@ -8,9 +8,9 @@ import practicalTask.model.Citizenship;
 import practicalTask.model.DocConcrete;
 import practicalTask.model.DocType;
 import practicalTask.utils.ArgChecker;
-import practicalTask.utils.dto.CitizenshipDto;
-import practicalTask.utils.dto.DocTypeDto;
-import practicalTask.utils.dto.UserDto;
+import practicalTask.utils.dto.handbook.CitizenshipDto;
+import practicalTask.utils.dto.handbook.DocTypeDto;
+import practicalTask.utils.dto.user.UserDto;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import practicalTask.model.Organization;
 import practicalTask.service.organization.OrganizationService;
-import practicalTask.utils.dto.OrganizationDto;
+import practicalTask.utils.dto.organization.OrganizationDto;
+import practicalTask.utils.dto.organization.OrganizationListDto;
 import practicalTask.utils.response.DataContainer;
 import practicalTask.utils.response.ResultContainer;
 
@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 public class OrganizationController {
 
-    private  final OrganizationService organizationService;
+    private final OrganizationService organizationService;
 
     @Autowired
     public OrganizationController(@Qualifier("organizationServiceImpl") OrganizationService organizationService) {
@@ -57,7 +57,7 @@ public class OrganizationController {
                                              @RequestParam(required = false) String inn,
                                              @RequestParam(required = false, defaultValue = "true") boolean isActive) {
 
-        List<OrganizationDto> organizationList = organizationService.getOrganizationList(name, inn, isActive);
+        List<OrganizationListDto> organizationList = organizationService.getOrganizationList(name, inn, isActive);
         return new DataContainer(organizationList);
     }
 
@@ -71,7 +71,7 @@ public class OrganizationController {
      * @return ResultContainer с сообщением success, если операция прошла успешно
      */
     @RequestMapping(method = RequestMethod.POST, value = "/api/organization/save")
-    public ResultContainer saveNewOrganization(Organization newOrganization) {
+    public ResultContainer saveNewOrganization(OrganizationDto newOrganization) {
         organizationService.save(newOrganization);
         return new ResultContainer("success");
     }
@@ -87,8 +87,7 @@ public class OrganizationController {
      * @return ResultContainer с сообщением success, если операция прошла успешно
      */
     @RequestMapping(method = RequestMethod.POST, value = "/api/organization/update")
-    public ResultContainer updateOrganization(@RequestParam Long id, Organization newOrganization) {
-        newOrganization.setActive(true);
+    public ResultContainer updateOrganization(@RequestParam Long id, OrganizationDto newOrganization) {
         organizationService.update(id, newOrganization);
         return new ResultContainer("success");
     }

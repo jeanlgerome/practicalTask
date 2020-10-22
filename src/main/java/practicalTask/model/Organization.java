@@ -2,9 +2,17 @@ package practicalTask.model;
 
 import org.hibernate.validator.constraints.Length;
 import practicalTask.utils.Constants;
-import practicalTask.utils.dto.organization.OrganizationDto;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
@@ -70,21 +78,6 @@ public class Organization {
     public Organization() {
     }
 
-    /**
-     * Метод обновляет поля в this объекте данными из newData
-     *
-     * @param newData объект с новыми данными
-     * @throws IllegalArgumentException если обнаружены некооректные данные
-     */
-    public void updateData(OrganizationDto newData) {
-        this.name = newData.getName();
-        this.fullName = newData.getFullName();
-        this.inn = newData.getInn();
-        this.kpp = newData.getKpp();
-        this.adress = newData.getAdress();
-        this.phone = newData.getPhone();
-        this.isActive = newData.isActive();
-    }
 
     public Long getId() {
         return id;

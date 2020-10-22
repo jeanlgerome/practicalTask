@@ -1,14 +1,19 @@
 package practicalTask.dao.office;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import practicalTask.model.Office;
 import practicalTask.model.Organization;
-import practicalTask.utils.ArgChecker;
+import practicalTask.utils.dto.office.OfficeFilterDto;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Реализация интерфейса OfficeDao
@@ -16,8 +21,13 @@ import java.util.List;
 @Repository
 public class OfficeDaoImpl implements OfficeDao {
 
-    @PersistenceContext
-    EntityManager entityManager;
+
+    private final EntityManager entityManager;
+
+    @Autowired
+    public OfficeDaoImpl(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     /**
      * Возвращает офис с требуемым айди. Если офиса нет, то возвращает null,
@@ -29,7 +39,7 @@ public class OfficeDaoImpl implements OfficeDao {
      */
     @Override
     public Office findOne(Long id) {
-        ArgChecker.requireNonNull(id, "id");
+        Objects.requireNonNull(id, "id");
         Office office = entityManager.find(Office.class, id);
         if (office == null) {
             throw new IllegalArgumentException("Office not found");
@@ -41,16 +51,13 @@ public class OfficeDaoImpl implements OfficeDao {
      * Поиск офиса по параметрам.
      * При этом необязательные параметры могут отсутствовать
      *
-     * @param orgId    айди организации. Обязательный параметр поиска
-     * @param name     название
-     * @param phone    телефон
-     * @param isActive активность
+     * @param officeFilterDto дто с параметрами
      * @return список офисов с подходящими параметрами
      * @throws IllegalArgumentException если orgId не задан
      */
     @Override
-    public List<Office> findAll(Long orgId, String name, String phone, boolean isActive) {
-        ArgChecker.requireNonNull(orgId, "orgId");
+    public List<Office> findAll(OfficeFilterDto officeFilterDto) {
+        Objects.requireNonNull(officeFilterDto.getOrgId(), "orgId");
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Office> officeQuery = cb.createQuery(Office.class);
         Root<Office> officeRoot = officeQuery.from(Office.class);
@@ -58,14 +65,14 @@ public class OfficeDaoImpl implements OfficeDao {
 
         officeQuery.select(officeRoot);
         Predicate mainPredicate = cb.conjunction();
-        mainPredicate = cb.and(mainPredicate, cb.equal(joinOrganization.get("id"), orgId));
+        mainPredicate = cb.and(mainPredicate, cb.equal(joinOrganization.get("id"), officeFilterDto.getOrgId()));
 
-        if (name != null && !name.isEmpty()) {
-            Predicate p = cb.like(officeRoot.get("name"), name);
+        if (officeFilterDto.getName() != null && !officeFilterDto.getName().isEmpty()) {
+            Predicate p = cb.like(officeRoot.get("name"), officeFilterDto.getName());
             mainPredicate = cb.and(mainPredicate, p);
         }
-        if (phone != null && !phone.isEmpty()) {
-            Predicate p = cb.like(officeRoot.get("phone"), phone);
+        if (officeFilterDto.getPhone() != null && !officeFilterDto.getPhone().isEmpty()) {
+            Predicate p = cb.like(officeRoot.get("phone"), officeFilterDto.getPhone());
             mainPredicate = cb.and(mainPredicate, p);
         }
         officeQuery.where(mainPredicate);
@@ -80,7 +87,7 @@ public class OfficeDaoImpl implements OfficeDao {
      */
     @Override
     public void save(Office office) {
-        ArgChecker.requireNonNull(office, "office");
+        Objects.requireNonNull(office, "office");
         entityManager.persist(office);
     }
 
@@ -93,7 +100,7 @@ public class OfficeDaoImpl implements OfficeDao {
      */
     @Override
     public Office update(Office office) {
-        ArgChecker.requireNonNull(office, "office");
+        Objects.requireNonNull(office, "office");
         return entityManager.merge(office);
     }
 }

@@ -1,9 +1,13 @@
 package practicalTask.utils.dto.office;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import practicalTask.model.Office;
 
 
 public class OfficeDto {
+
+    @JsonIgnore
+    private Long orgId;
 
     private Long id;
 
@@ -27,6 +31,14 @@ public class OfficeDto {
         this.adress = office.getAdress();
         this.phone = office.getPhone();
         this.isActive = office.isActive();
+    }
+
+    public Long getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(Long orgId) {
+        this.orgId = orgId;
     }
 
     public Long getId() {

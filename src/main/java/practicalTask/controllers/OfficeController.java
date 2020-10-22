@@ -3,14 +3,16 @@ package practicalTask.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import practicalTask.service.office.OfficeService;
 import practicalTask.utils.dto.office.OfficeDto;
+import practicalTask.utils.dto.office.OfficeFilterDto;
 import practicalTask.utils.dto.office.OfficeListDto;
-import practicalTask.utils.response.DataContainer;
 import practicalTask.utils.response.ResultContainer;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -25,7 +27,7 @@ public class OfficeController {
     private final OfficeService officeService;
 
     @Autowired
-    public OfficeController(@Qualifier("officeServiceImpl")OfficeService officeService){
+    public OfficeController(@Qualifier("officeServiceImpl") OfficeService officeService) {
         this.officeService = officeService;
     }
 
@@ -37,28 +39,19 @@ public class OfficeController {
      * @return DataContainer, который содержит информацию об офисе
      */
     @RequestMapping(method = RequestMethod.GET, value = "/api/office/{id}")
-    public DataContainer getOffice(@PathVariable @NotNull final Long id) {
-        OfficeDto office = officeService.getOffice(id);
-        return new DataContainer(office);
+    public OfficeDto getOffice(@PathVariable @NotNull final Long id) {
+        return officeService.getOffice(id);
     }
 
     /**
      * Метод получает  из сервиса список офисов, соответствующих параметрам,
-     * после чего помещает необходимые данные в output,
-     * затем output заворачивается в DataContainer
      *
-     * @param orgId    - айди организации, по нему ведется поиск. Обязательный параметр
-     * @param name     - название офиса, по нему ведется поиск.
-     * @param phone    - телефон, по нему ведется поиск
-     * @param isActive - активность, по ней ведется поиск
+     * @param officeFilterDto дто с параметрами
      * @return DataContainer с списком офисов
      */
     @RequestMapping(method = RequestMethod.POST, value = "/api/office/list")
-    public DataContainer getOfficeList(@RequestParam @NotNull Long orgId, @RequestParam(required = false) String name,
-                                       @RequestParam(required = false) String phone,
-                                       @RequestParam(required = false) boolean isActive) {
-        List<OfficeListDto> officeList = officeService.getOfficeList(orgId, name, phone, isActive);
-        return new DataContainer(officeList);
+    public List<OfficeListDto> getOfficeList(OfficeFilterDto officeFilterDto) {
+        return officeService.getOfficeList(officeFilterDto);
     }
 
     /**
@@ -69,31 +62,20 @@ public class OfficeController {
      * @return ResultContainer с сообщением success, если операция прошла успешно
      */
     @RequestMapping(method = RequestMethod.POST, value = "/api/office/save")
-    public ResultContainer saveNewOffice(@RequestParam @NotNull Long orgId, OfficeDto newOffice) {
-        officeService.save(orgId, newOffice);
+    public ResultContainer saveNewOffice(OfficeDto newOffice) {
+        officeService.save(newOffice);
         return new ResultContainer("success");
     }
 
     /**
      * Обновляет старый офис
      *
-     * @param id       айди обновляемого офиса. Обязательный параметр
-     * @param name     название. Обязательный параметр
-     * @param address  адрес. Обязательный параметр
-     * @param phone    телефон
-     * @param isActive статус активности
+     * @param officeDto дто с данными
      * @return ResultContainer с сообщением о результате операции: success/error
      */
     @RequestMapping(method = RequestMethod.POST, value = "/api/office/update")
-    public ResultContainer updateOffice(@RequestParam Long id, @RequestParam @NotBlank String name,
-                                        @RequestParam @NotBlank String address, @RequestParam(required = false) String phone,
-                                        @RequestParam(defaultValue = "true") boolean isActive) {
-        OfficeDto officeDto = new OfficeDto();
-        officeDto.setName(name);
-        officeDto.setAdress(address);
-        officeDto.setPhone(phone);
-        officeDto.setActive(isActive);
-        officeService.update(id, officeDto);
+    public ResultContainer updateOffice(OfficeDto officeDto) {
+        officeService.update(officeDto);
         return new ResultContainer("success");
     }
 }

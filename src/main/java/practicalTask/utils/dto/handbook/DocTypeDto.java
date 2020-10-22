@@ -1,17 +1,16 @@
 package practicalTask.utils.dto.handbook;
 
 import practicalTask.model.DocType;
-import practicalTask.utils.ArgChecker;
 
 public class DocTypeDto {
 
-    private  String name;
+    private String name;
 
-    private  Long code;
+    private Long code;
 
     public DocTypeDto(DocType docType) {
-        this.name = ArgChecker.requireNonBlank(docType.getDocName(), "DocName" );
-        this.code = ArgChecker.requireNonNull(docType.getDocCode(), "DocCode)");
+        this.name = docType.getDocName();
+        this.code = docType.getDocCode();
     }
 
     public String getName() {

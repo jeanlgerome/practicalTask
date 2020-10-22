@@ -1,5 +1,6 @@
 package practicalTask.service.organization;
 
+import practicalTask.utils.dto.organization.OrgFilterDto;
 import practicalTask.utils.dto.organization.OrganizationDto;
 import practicalTask.utils.dto.organization.OrganizationListDto;
 
@@ -9,10 +10,10 @@ public interface OrganizationService {
 
     OrganizationDto getOrganization(Long id);
 
-    List<OrganizationListDto> getOrganizationList(String name, String inn, boolean isActive);
+    List<OrganizationListDto> getOrganizationList(OrgFilterDto orgFilterDto);
 
     void save(OrganizationDto organization);
 
-    void update(Long orgId, OrganizationDto organization);
+    void update(OrganizationDto organization);
 
 }

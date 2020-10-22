@@ -9,12 +9,13 @@ import practicalTask.dao.organization.OrganizationDao;
 import practicalTask.model.Office;
 import practicalTask.model.Organization;
 import practicalTask.service.organization.OrganizationService;
-import practicalTask.utils.ArgChecker;
 import practicalTask.utils.dto.office.OfficeDto;
+import practicalTask.utils.dto.office.OfficeFilterDto;
 import practicalTask.utils.dto.office.OfficeListDto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class OfficeServiceImpl implements OfficeService {
@@ -38,7 +39,7 @@ public class OfficeServiceImpl implements OfficeService {
      */
     @Override
     public OfficeDto getOffice(Long id) {
-        ArgChecker.requireNonNull(id, "id");
+        Objects.requireNonNull(id, "id");
         Office office = officeDao.findOne(id);
         return new OfficeDto(office);
     }
@@ -46,19 +47,16 @@ public class OfficeServiceImpl implements OfficeService {
     /**
      * Поиск офисов по параметрам
      *
-     * @param orgId    айди организации. Обязательный параметр
-     * @param name     название офиса
-     * @param phone    телефон офиса
-     * @param isActive статус активности
+     * @param officeFilterDto дто с параметрами
      * @return список организаций с подходящими параметрами
      * @throws IllegalArgumentException если отсутствуют обязательные параметры
      * @see OfficeDao
      */
     @Override
-    public List<OfficeListDto> getOfficeList(Long orgId, String name, String phone, boolean isActive) {
-        ArgChecker.requireNonNull(orgId, "orgId");
-        organizationDao.findOne(orgId);
-        List<Office> officeList = officeDao.findAll(orgId, name, phone, isActive);
+    public List<OfficeListDto> getOfficeList(OfficeFilterDto officeFilterDto) {
+        Objects.requireNonNull(officeFilterDto.getOrgId(), "orgId");
+        organizationDao.findOne(officeFilterDto.getOrgId());
+        List<Office> officeList = officeDao.findAll(officeFilterDto);
         List<OfficeListDto> dtoList = new ArrayList<>();
         for (Office office : officeList) {
             dtoList.add(new OfficeListDto(office.getId(), office.getName(), office.isActive()));
@@ -69,7 +67,6 @@ public class OfficeServiceImpl implements OfficeService {
     /**
      * Сохраняет новый офис
      *
-     * @param orgId  айди организации
      * @param officeDto данные нового офиса
      * @throws IllegalArgumentException, если нет organization с таким айди или входные параметры пусты
      * @see OfficeDao
@@ -78,12 +75,12 @@ public class OfficeServiceImpl implements OfficeService {
 
     @Override
     @Transactional
-    public void save(Long orgId, OfficeDto officeDto) {
-        ArgChecker.requireNonNull(officeDto, "office");
-        ArgChecker.requireNonNull(orgId, "orgId");
-        Organization organization = organizationDao.findOne(orgId);
+    public void save(OfficeDto officeDto) {
+        Objects.requireNonNull(officeDto, "office");
+        Objects.requireNonNull(officeDto.getOrgId(), "orgId");
+        Organization organization = organizationDao.findOne(officeDto.getOrgId());
         Office newOffice = new Office();
-        newOffice.update(officeDto);
+        setOfficeData(newOffice, officeDto);
         newOffice.setOrganization(organization);
         officeDao.save(newOffice);
     }
@@ -91,18 +88,26 @@ public class OfficeServiceImpl implements OfficeService {
     /**
      * Обновляет старый офис:
      *
-     * @param officeId      айди обновляемого офиса
      * @param newOfficeData объект с новыми данными
      * @throws IllegalArgumentException, если officeId или newOfficeData пусты
      * @see OfficeDao
      */
     @Override
     @Transactional
-    public void update(Long officeId, OfficeDto newOfficeData) {
-        ArgChecker.requireNonNull(officeId, "officeId");
-        ArgChecker.requireNonNull(newOfficeData, "office");
-        Office oldOffice = officeDao.findOne(officeId);
-        oldOffice.update(newOfficeData);
+    public void update(OfficeDto newOfficeData) {
+        Objects.requireNonNull(newOfficeData, "office");
+        if (newOfficeData.getId() == null) {
+            throw new IllegalArgumentException();
+        }
+        Office oldOffice = officeDao.findOne(newOfficeData.getId());
+        setOfficeData(oldOffice, newOfficeData);
         officeDao.update(oldOffice);
+    }
+
+    private void setOfficeData(Office office, OfficeDto newOfficeData) {
+        office.setName(newOfficeData.getName());
+        office.setAdress(newOfficeData.getAdress());
+        office.setPhone(newOfficeData.getPhone());
+        office.setActive(newOfficeData.isActive());
     }
 }

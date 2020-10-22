@@ -1,11 +1,11 @@
 package practicalTask.dao.handbook;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import practicalTask.model.Citizenship;
 import practicalTask.model.DocType;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
 
@@ -15,8 +15,12 @@ import java.util.List;
 @Repository
 public class HandbookDaoImpl implements HandbookDao {
 
-    @PersistenceContext
-    EntityManager entityManager;
+    private final EntityManager entityManager;
+
+    @Autowired
+    public HandbookDaoImpl(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     /**
      * Поиск типов документов

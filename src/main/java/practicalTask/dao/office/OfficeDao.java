@@ -1,6 +1,7 @@
 package practicalTask.dao.office;
 
 import practicalTask.model.Office;
+import practicalTask.utils.dto.office.OfficeFilterDto;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface OfficeDao {
 
     Office findOne(final Long id);
 
-    List<Office> findAll(Long orgId, String name, String phone, boolean isActive);
+    List<Office> findAll(OfficeFilterDto officeFilterDto);
 
     void save(final Office office);
 

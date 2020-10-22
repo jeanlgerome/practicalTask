@@ -1,12 +1,16 @@
 package practicalTask.utils.dto.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import practicalTask.model.User;
-import practicalTask.utils.ArgChecker;
 
 import javax.validation.constraints.NotBlank;
+import java.util.Objects;
 
 
 public class UserDto {
+
+    @JsonIgnore
+    private Long officeId;
 
     private Long id;
 
@@ -41,7 +45,7 @@ public class UserDto {
      * Конструктор. Используется в сервисе при передаче результата поиска по айди
      */
     public UserDto(User userFromDb) {
-        ArgChecker.requireNonNull(userFromDb, "userFromDb");
+        Objects.requireNonNull(userFromDb, "userFromDb");
         this.id = userFromDb.getId();
         this.firstName = userFromDb.getFirstName();
         this.secondName = userFromDb.getSecondName();
@@ -63,6 +67,18 @@ public class UserDto {
             this.docDate = null;
         }
         this.isIdentified = userFromDb.isIdentified();
+    }
+
+    public Long getOfficeId() {
+        return officeId;
+    }
+
+    public void setOfficeId(Long officeId) {
+        this.officeId = officeId;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getId() {

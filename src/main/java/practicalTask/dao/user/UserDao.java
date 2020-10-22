@@ -1,6 +1,7 @@
 package practicalTask.dao.user;
 
 import practicalTask.model.User;
+import practicalTask.utils.dto.user.UserFilterDto;
 
 import java.util.List;
 
@@ -13,8 +14,7 @@ public interface UserDao {
     User findOne(final Long id);
 
 
-    List<User> findAll(Long officeId, String firstName, String lastName, String middleName, String position,
-                       String docCode, String citizenshipCode);
+    List<User> findAll(UserFilterDto userFilterDto);
 
     void save(final User user);
 

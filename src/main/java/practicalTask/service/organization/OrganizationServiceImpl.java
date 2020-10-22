@@ -6,12 +6,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import practicalTask.dao.organization.OrganizationDao;
 import practicalTask.model.Organization;
-import practicalTask.utils.ArgChecker;
+import practicalTask.utils.dto.organization.OrgFilterDto;
 import practicalTask.utils.dto.organization.OrganizationDto;
 import practicalTask.utils.dto.organization.OrganizationListDto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Organization Сервис, формирует и предоставляет данные контроллеру
@@ -25,12 +26,12 @@ public class OrganizationServiceImpl implements OrganizationService {
     private final OrganizationDao organizationDao;
 
     @Autowired
-    public OrganizationServiceImpl(@Qualifier("organizationDaoImpl")OrganizationDao organizationDao) {
+    public OrganizationServiceImpl(@Qualifier("organizationDaoImpl") OrganizationDao organizationDao) {
         this.organizationDao = organizationDao;
     }
 
     /**
-     * Поиск организации по айди. Внутри используется метод organizationDao.findOne
+     * Поиск организации по айди
      *
      * @param id айди организации
      * @return организацию с айди = id
@@ -38,29 +39,26 @@ public class OrganizationServiceImpl implements OrganizationService {
      */
     @Override
     public OrganizationDto getOrganization(Long id) {
-        ArgChecker.requireNonNull(id, "id");
+        Objects.requireNonNull(id, "id");
         Organization organization = organizationDao.findOne(id);
         return new OrganizationDto(organization);
     }
 
     /**
      * Поиск по имени и необязательным инн/статусу активности
-     * Внутри используется метод organizationDao.findAll
      *
-     * @param name     название организации
-     * @param inn      инн организации
-     * @param isActive статус активности
+     * @param orgFilterDto дто с параметрами
      * @return список организаций с подходящими параметрами
      * @throws IllegalArgumentException если отсутствуют обязательные параметры
      * @see OrganizationDao
      */
     @Override
-    public List<OrganizationListDto> getOrganizationList(String name, String inn, boolean isActive) {
-        ArgChecker.requireNonBlank(name, "name");
+    public List<OrganizationListDto> getOrganizationList(OrgFilterDto orgFilterDto) {
+        Objects.requireNonNull(orgFilterDto, "orgFilterDto");
         List<Organization> organizationList;
-        organizationList = organizationDao.findAll(name, inn, isActive);
+        organizationList = organizationDao.findAll(orgFilterDto);
         List<OrganizationListDto> dtoList = new ArrayList<>();
-        for (Organization org: organizationList) {
+        for (Organization org : organizationList) {
             dtoList.add(new OrganizationListDto(org.getName(), org.getInn(), org.isActive()));
         }
         return dtoList;
@@ -68,7 +66,6 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     /**
      * Сохраняет новую организацию
-     * Внутри используется метод organizationDao.save
      *
      * @param organizationDto данные новой организации
      * @throws IllegalArgumentException, если organization пуста
@@ -78,28 +75,36 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     @Transactional
     public void save(OrganizationDto organizationDto) {
-        ArgChecker.requireNonNull(organizationDto, "organization");
+        Objects.requireNonNull(organizationDto, "organization");
         Organization organization = new Organization();
-        organization.updateData(organizationDto);
+        setOrgData(organization, organizationDto);
         organizationDao.save(organization);
     }
 
     /**
      * Обновляет старую организацию
      *
-     * @param orgId               айди обновляемой организации
-     *                            Внутри используется методы organizationDao.findOne и organizationDao.update
      * @param newOrganizationData объект с новыми данными
      * @throws IllegalArgumentException если orgId или newOrganizationData пусты
      * @see OrganizationDao
      */
     @Override
     @Transactional
-    public void update(Long orgId, OrganizationDto newOrganizationData) {
-        ArgChecker.requireNonNull(orgId, "orgId");
-        ArgChecker.requireNonNull(newOrganizationData, "newOrganizationData");
-        Organization oldOrganization = organizationDao.findOne(orgId);
-        oldOrganization.updateData(newOrganizationData);
+    public void update(OrganizationDto newOrganizationData) {
+        Objects.requireNonNull(newOrganizationData.getId());
+        Objects.requireNonNull(newOrganizationData, "newOrganizationData");
+        Organization oldOrganization = organizationDao.findOne(newOrganizationData.getId());
+        setOrgData(oldOrganization, newOrganizationData);
         organizationDao.update(oldOrganization);
+    }
+
+    private void setOrgData(Organization organization, OrganizationDto newData) {
+        organization.setName(newData.getName());
+        organization.setFullName(newData.getFullName());
+        organization.setInn(newData.getInn());
+        organization.setKpp(newData.getKpp());
+        organization.setAdress(newData.getAdress());
+        organization.setPhone(newData.getPhone());
+        organization.setActive(newData.isActive());
     }
 }

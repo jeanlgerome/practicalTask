@@ -7,7 +7,6 @@ import practicalTask.dao.handbook.HandbookDao;
 import practicalTask.model.Citizenship;
 import practicalTask.model.DocConcrete;
 import practicalTask.model.DocType;
-import practicalTask.utils.ArgChecker;
 import practicalTask.utils.dto.handbook.CitizenshipDto;
 import practicalTask.utils.dto.handbook.DocTypeDto;
 import practicalTask.utils.dto.user.UserDto;
@@ -16,6 +15,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Сервис работы с справочниками
@@ -65,7 +65,7 @@ public class HandbookServiceImpl implements HandbookService {
      */
     @Override
     public DocConcrete parseDoc(UserDto userDto) {
-        ArgChecker.requireNonNull(userDto, "userDto");
+        Objects.requireNonNull(userDto, "userDto");
         if (userDto.getDocNumber() == null || userDto.getDocDate() == null || (userDto.getDocCode() == null && userDto.getDocName() == null)) {
             return null;
         }

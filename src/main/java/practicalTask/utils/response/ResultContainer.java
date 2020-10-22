@@ -1,7 +1,7 @@
 package practicalTask.utils.response;
 
 /**
- * Контекнер для информации о результате
+ * Контейнер для информации о результате
  */
 public class ResultContainer {
 

@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 import practicalTask.service.handbookService.HandbookService;
 import practicalTask.utils.dto.handbook.CitizenshipDto;
 import practicalTask.utils.dto.handbook.DocTypeDto;
-import practicalTask.utils.response.DataContainer;
 
 import java.util.List;
 
@@ -31,9 +30,8 @@ public class HandbookController {
      * @return список типов документов с их кодами
      */
     @RequestMapping(method = RequestMethod.POST, value = "/api/docs")
-    public DataContainer getDocTypes() {
-        List<DocTypeDto> docTypeDtoList = handbookService.getDocTypes();
-        return new DataContainer(docTypeDtoList);
+    public List<DocTypeDto> getDocTypes() {
+        return handbookService.getDocTypes();
     }
 
     /**
@@ -42,8 +40,7 @@ public class HandbookController {
      * @return список гражданств с их кодами
      */
     @RequestMapping(method = RequestMethod.POST, value = "/api/countries")
-    public DataContainer getCitizenships() {
-        List<CitizenshipDto> citizenshipDtoList = handbookService.getCitizenships();
-        return new DataContainer(citizenshipDtoList);
+    public List<CitizenshipDto> getCitizenships() {
+        return handbookService.getCitizenships();
     }
 }

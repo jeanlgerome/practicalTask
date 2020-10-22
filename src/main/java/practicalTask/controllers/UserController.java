@@ -4,11 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import practicalTask.service.user.UserService;
 import practicalTask.utils.dto.user.UserDto;
+import practicalTask.utils.dto.user.UserFilterDto;
 import practicalTask.utils.dto.user.UserListDto;
-import practicalTask.utils.response.DataContainer;
 import practicalTask.utils.response.ResultContainer;
 
 import java.util.List;
@@ -38,60 +41,44 @@ public class UserController {
      */
     @Transactional
     @RequestMapping(method = RequestMethod.GET, value = "/api/user/{id}")
-    public DataContainer getUser(@PathVariable Long id) {
-        UserDto user = userService.getUser(id);
-        return new DataContainer(user);
+    public UserDto getUser(@PathVariable Long id) {
+        return userService.getUser(id);
     }
 
     /**
      * Метод получает  из сервиса список пользователей, соответствующих параметрам,
-     * после чего помещает необходимые данные в output,
-     * затем output заворачивается в DataContainer
      *
-     * @param officeId        айди офиса пользователя, обязательный параметр
-     * @param firstName
-     * @param lastName
-     * @param middleName
-     * @param position        должность
-     * @param docCode         код документа пользователя, необязательный параметр
-     * @param citizenshipCode код гражданства пользователя, необязательный параметр
+     * @param userFilterDto дто с параметрами
      * @return DataContainer с списком пользователей
      */
     @RequestMapping(method = RequestMethod.POST, value = "/api/user/list")
-    public DataContainer getUserList(@RequestParam Long officeId, @RequestParam(required = false) String firstName,
-                                     @RequestParam(required = false) String lastName, @RequestParam(required = false) String middleName,
-                                     @RequestParam(required = false) String position, @RequestParam(required = false) String docCode,
-                                     @RequestParam(required = false) String citizenshipCode) {
-        List<UserListDto> userList = userService.getUserList(officeId, firstName, lastName, middleName, position, docCode, citizenshipCode);
-        return new DataContainer(userList);
+    public List<UserListDto> getUserList(UserFilterDto userFilterDto) {
 
+        return userService.getUserList(userFilterDto);
     }
 
     /**
      * Сохраняет нового пользователя
      * Возвращает success, если операция была успешна
      *
-     * @param officeId айди офиса пользователя, обязательный параметр
-     * @param userDto  данные пользователя, имеет обязательные поля
+     * @param userDto дто с данными
      * @return ResultContainer с сообщением success, если операция прошла успешно
      */
     @RequestMapping(method = RequestMethod.POST, value = "/api/user/save")
-    public ResultContainer saveNewUser(@RequestParam Long officeId, UserDto userDto) {
-        userService.save(officeId, userDto);
+    public ResultContainer saveNewUser(UserDto userDto) {
+        userService.save(userDto);
         return new ResultContainer("success");
     }
 
     /**
      * Обновляет данные пользователя
      *
-     * @param id       айди обновляемого пользователя, обязательный параметр
-     * @param officeId айди офиса пользователя
-     * @param userDto  новые данные, имеет обязательные поля
+     * @param userDto  новые данные
      * @return ResultContainer с сообщением success, если операция прошла успешно
      */
     @RequestMapping(method = RequestMethod.POST, value = "/api/user/update")
-    public ResultContainer updateUser(@RequestParam Long id, @RequestParam(required = false) Long officeId, UserDto userDto) {
-        userService.update(id, officeId, userDto);
+    public ResultContainer updateUser(UserDto userDto) {
+        userService.update(userDto);
         return new ResultContainer("success");
     }
 }

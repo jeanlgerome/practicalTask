@@ -1,6 +1,7 @@
 package practicalTask.dao.organization;
 
 import practicalTask.model.Organization;
+import practicalTask.utils.dto.organization.OrgFilterDto;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public interface OrganizationDao {
 
     Organization findReference(Long id);
 
-    List<Organization> findAll(String name, String inn, boolean isActive);
+    List<Organization> findAll(OrgFilterDto orgFilterDto);
 
     void save(final Organization organization);
 

@@ -8,12 +8,13 @@ import practicalTask.dao.office.OfficeDao;
 import practicalTask.dao.user.UserDao;
 import practicalTask.model.User;
 import practicalTask.service.handbookService.HandbookService;
-import practicalTask.utils.ArgChecker;
 import practicalTask.utils.dto.user.UserDto;
+import practicalTask.utils.dto.user.UserFilterDto;
 import practicalTask.utils.dto.user.UserListDto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -25,8 +26,8 @@ public class UserServiceImpl implements UserService {
     private final HandbookService handbookService;
 
     @Autowired
-    public UserServiceImpl( @Qualifier("userDaoImpl")UserDao userDao, @Qualifier("officeDaoImpl")OfficeDao officeDao, @Qualifier("handbookServiceImpl")HandbookService handbookService) {
-        this.userDao= userDao;
+    public UserServiceImpl(@Qualifier("userDaoImpl") UserDao userDao, @Qualifier("officeDaoImpl") OfficeDao officeDao, @Qualifier("handbookServiceImpl") HandbookService handbookService) {
+        this.userDao = userDao;
         this.officeDao = officeDao;
         this.handbookService = handbookService;
     }
@@ -41,7 +42,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUser(Long id) {
-        ArgChecker.requireNonNull(id, "id");
+        Objects.requireNonNull(id, "id");
         User user = userDao.findOne(id);
         UserDto userDto = new UserDto(user);
         return userDto;
@@ -50,21 +51,14 @@ public class UserServiceImpl implements UserService {
     /**
      * Поиск офисов по параметрам
      *
-     * @param officeId
-     * @param firstName
-     * @param lastName
-     * @param middleName
-     * @param position
-     * @param docCode
-     * @param citizenshipCode
+     * @param userFilterDto дто с параметрами
      * @return
      */
     @Override
-    public List<UserListDto> getUserList(Long officeId, String firstName, String lastName, String middleName, String position,
-                                     String docCode, String citizenshipCode) {
-        ArgChecker.requireNonNull(officeId, "officeId");
-        officeDao.findOne(officeId);
-        List<User> userList = userDao.findAll(officeId, firstName, lastName, middleName, position, docCode, citizenshipCode);
+    public List<UserListDto> getUserList(UserFilterDto userFilterDto) {
+        Objects.requireNonNull(userFilterDto.getOfficeId(), "officeId");
+        officeDao.findOne(userFilterDto.getOfficeId());
+        List<User> userList = userDao.findAll(userFilterDto);
         List<UserListDto> dtoList = new ArrayList<>();
         for (User user : userList) {
             dtoList.add(new UserListDto(user.getFirstName(), user.getSecondName(), user.getMiddleName(), user.getPosition(), user.getDocCode(), user.getCitizenshipCode()));
@@ -75,41 +69,48 @@ public class UserServiceImpl implements UserService {
     /**
      * Сохраняет новую организацию
      *
-     * @param officeId айди офиса пользователя
-     * @param userDto  данные пользователя
+     * @param userDto данные пользователя
      */
     @Override
     @Transactional
-    public void save(Long officeId, UserDto userDto) {
-        ArgChecker.requireNonNull(officeId, "officeId");
-        ArgChecker.requireNonNull(userDto, "userDto");
+    public void save(UserDto userDto) {
+        Objects.requireNonNull(userDto.getOfficeId(), "officeId");
+        Objects.requireNonNull(userDto, "userDto");
         User newUser = new User();
-        newUser.update(userDto);
+        setUserData(newUser, userDto);
         newUser.setDocConcrete(handbookService.parseDoc(userDto));
         newUser.setCitizenship(handbookService.parseCitizenship(userDto));
-        newUser.setOffice(officeDao.findOne(officeId));
+        newUser.setOffice(officeDao.findOne(userDto.getOfficeId()));
         userDao.save(newUser);
     }
 
     /**
      * Обновляет старый офис
      *
-     * @param userId  айди обновляемого пользователя
      * @param userDto новые данные
      */
     @Override
     @Transactional
-    public void update(Long userId, Long officeId, UserDto userDto) {
-        ArgChecker.requireNonNull(userId, "userId");
-        ArgChecker.requireNonNull(userDto, "userDto");
-        User oldUser = userDao.findOne(userId);
-        oldUser.update(userDto);
+    public void update(UserDto userDto) {
+        Objects.requireNonNull(userDto.getId(), "userId");
+        Objects.requireNonNull(userDto, "userDto");
+        User oldUser = userDao.findOne(userDto.getId());
+        setUserData(oldUser, userDto);
 
-        if (officeId != null) {
-            oldUser.setOffice(officeDao.findOne(officeId));
+        if (userDto.getOfficeId() != null) {
+            oldUser.setOffice(officeDao.findOne(userDto.getOfficeId()));
         }
         oldUser.setDocConcrete(handbookService.parseDoc(userDto));
         oldUser.setCitizenship(handbookService.parseCitizenship(userDto));
         userDao.update(oldUser);
+    }
+
+    private void setUserData(User user, UserDto newUserData) {
+        user.setFirstName(newUserData.getFirstName());
+        user.setSecondName(newUserData.getSecondName());
+        user.setMiddleName(newUserData.getMiddleName());
+        user.setPosition(newUserData.getPosition());
+        user.setPhone(newUserData.getPhone());
+        user.setIdentified(newUserData.isIdentified());
     }
 }

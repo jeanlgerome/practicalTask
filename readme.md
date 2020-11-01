@@ -1,5 +1,5 @@
 Инструкция по запуску:
-1. Скачать файл practicalTask-1.0-SNAPSHOT.jar из папки target
+1. Скачать файл practicalTask-1.0-SNAPSHOT.jar
 2. Открыть командную строку 
 3. Перейти в директорию с файлом с помощью cd "путь"
 4. Запустить practicalTask-1.0-SNAPSHOT.jar командой java -jar practicalTask-1.0-SNAPSHOT.jar

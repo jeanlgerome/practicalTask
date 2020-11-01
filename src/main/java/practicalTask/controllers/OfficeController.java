@@ -50,7 +50,7 @@ public class OfficeController {
      * @return DataContainer с списком офисов
      */
     @RequestMapping(method = RequestMethod.POST, value = "/api/office/list")
-    public List<OfficeListDto> getOfficeList(OfficeFilterDto officeFilterDto) {
+    public List<OfficeListDto> getOfficeList(@Validated OfficeFilterDto officeFilterDto) {
         return officeService.getOfficeList(officeFilterDto);
     }
 
@@ -62,9 +62,8 @@ public class OfficeController {
      * @return ResultContainer с сообщением success, если операция прошла успешно
      */
     @RequestMapping(method = RequestMethod.POST, value = "/api/office/save")
-    public ResultContainer saveNewOffice(OfficeDto newOffice) {
+    public void saveNewOffice(@Validated OfficeDto newOffice) {
         officeService.save(newOffice);
-        return new ResultContainer("success");
     }
 
     /**
@@ -74,8 +73,7 @@ public class OfficeController {
      * @return ResultContainer с сообщением о результате операции: success/error
      */
     @RequestMapping(method = RequestMethod.POST, value = "/api/office/update")
-    public ResultContainer updateOffice(OfficeDto officeDto) {
+    public void updateOffice(@Validated OfficeDto officeDto) {
         officeService.update(officeDto);
-        return new ResultContainer("success");
     }
 }

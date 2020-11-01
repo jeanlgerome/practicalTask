@@ -101,7 +101,6 @@ public class OfficeServiceImpl implements OfficeService {
         }
         Office oldOffice = officeDao.findOne(newOfficeData.getId());
         setOfficeData(oldOffice, newOfficeData);
-        officeDao.update(oldOffice);
     }
 
     private void setOfficeData(Office office, OfficeDto newOfficeData) {

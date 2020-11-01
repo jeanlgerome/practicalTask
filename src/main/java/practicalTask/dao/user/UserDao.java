@@ -18,5 +18,5 @@ public interface UserDao {
 
     void save(final User user);
 
-    User update(final User user);
+
 }

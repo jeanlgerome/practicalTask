@@ -95,7 +95,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         Objects.requireNonNull(newOrganizationData, "newOrganizationData");
         Organization oldOrganization = organizationDao.findOne(newOrganizationData.getId());
         setOrgData(oldOrganization, newOrganizationData);
-        organizationDao.update(oldOrganization);
+
     }
 
     private void setOrgData(Organization organization, OrganizationDto newData) {

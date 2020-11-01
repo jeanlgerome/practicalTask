@@ -17,5 +17,4 @@ public interface OfficeDao {
 
     void save(final Office office);
 
-    Office update(final Office office);
 }

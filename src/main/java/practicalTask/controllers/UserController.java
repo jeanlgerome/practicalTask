@@ -52,7 +52,7 @@ public class UserController {
      * @return DataContainer с списком пользователей
      */
     @RequestMapping(method = RequestMethod.POST, value = "/api/user/list")
-    public List<UserListDto> getUserList(UserFilterDto userFilterDto) {
+    public List<UserListDto> getUserList(@Validated UserFilterDto userFilterDto) {
 
         return userService.getUserList(userFilterDto);
     }
@@ -65,9 +65,8 @@ public class UserController {
      * @return ResultContainer с сообщением success, если операция прошла успешно
      */
     @RequestMapping(method = RequestMethod.POST, value = "/api/user/save")
-    public ResultContainer saveNewUser(UserDto userDto) {
+    public void saveNewUser(@Validated UserDto userDto) {
         userService.save(userDto);
-        return new ResultContainer("success");
     }
 
     /**
@@ -77,8 +76,7 @@ public class UserController {
      * @return ResultContainer с сообщением success, если операция прошла успешно
      */
     @RequestMapping(method = RequestMethod.POST, value = "/api/user/update")
-    public ResultContainer updateUser(UserDto userDto) {
+    public void updateUser(@Validated UserDto userDto) {
         userService.update(userDto);
-        return new ResultContainer("success");
     }
 }

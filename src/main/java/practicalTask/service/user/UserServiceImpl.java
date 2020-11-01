@@ -102,7 +102,7 @@ public class UserServiceImpl implements UserService {
         }
         oldUser.setDocConcrete(handbookService.parseDoc(userDto));
         oldUser.setCitizenship(handbookService.parseCitizenship(userDto));
-        userDao.update(oldUser);
+
     }
 
     private void setUserData(User user, UserDto newUserData) {

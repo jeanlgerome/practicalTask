@@ -51,7 +51,7 @@ public class OrganizationController {
      */
     @RequestMapping(method = RequestMethod.POST, value = "/api/organization/list")
 
-    public List<OrganizationListDto> getOrganizationList(OrgFilterDto orgFilterDto) {
+    public List<OrganizationListDto> getOrganizationList(@Validated OrgFilterDto orgFilterDto) {
         return organizationService.getOrganizationList(orgFilterDto);
     }
 
@@ -65,9 +65,8 @@ public class OrganizationController {
      * @return ResultContainer с сообщением success, если операция прошла успешно
      */
     @RequestMapping(method = RequestMethod.POST, value = "/api/organization/save")
-    public ResultContainer saveNewOrganization(@Validated OrganizationDto newOrganization) {
+    public void saveNewOrganization(@Validated OrganizationDto newOrganization) {
         organizationService.save(newOrganization);
-        return new ResultContainer("success");
     }
 
     /**
@@ -80,8 +79,7 @@ public class OrganizationController {
      * @return ResultContainer с сообщением success, если операция прошла успешно
      */
     @RequestMapping(method = RequestMethod.POST, value = "/api/organization/update")
-    public ResultContainer updateOrganization(@Validated OrganizationDto newOrganization) {
+    public void updateOrganization(@Validated OrganizationDto newOrganization) {
         organizationService.update(newOrganization);
-        return new ResultContainer("success");
     }
 }

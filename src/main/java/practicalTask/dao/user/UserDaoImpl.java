@@ -32,7 +32,7 @@ public class UserDaoImpl implements UserDao {
 
     private Predicate mainPredicate;
 
-    @Autowired
+
     public UserDaoImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
@@ -110,16 +110,5 @@ public class UserDaoImpl implements UserDao {
         entityManager.persist(user);
     }
 
-    /**
-     * Обновляет данного пользователя
-     *
-     * @param user обновляемая сущность
-     * @return обновленный пользователь
-     * @throws IllegalArgumentException если user == null
-     */
-    @Override
-    public User update(User user) {
-        Objects.requireNonNull(user, "user");
-        return entityManager.merge(user);
-    }
+
 }

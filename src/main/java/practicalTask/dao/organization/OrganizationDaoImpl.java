@@ -8,6 +8,7 @@ import practicalTask.utils.dto.organization.OrgFilterDto;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
@@ -21,6 +22,10 @@ public class OrganizationDaoImpl implements OrganizationDao {
 
 
     private final EntityManager entityManager;
+
+    private CriteriaBuilder cb;
+
+    private Predicate mainPredicate;
 
     @Autowired
     public OrganizationDaoImpl(EntityManager entityManager) {
@@ -71,20 +76,25 @@ public class OrganizationDaoImpl implements OrganizationDao {
     @Override
     public List<Organization> findAll(OrgFilterDto orgFilterDto) {
         Objects.requireNonNull(orgFilterDto, "orgFilterDto");
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Organization> organizationQuery = cb.createQuery(Organization.class);
         Root<Organization> organizationRoot = organizationQuery.from(Organization.class);
 
-        Predicate mainPredicate = cb.conjunction();
-        mainPredicate = cb.and(mainPredicate, cb.equal(organizationRoot.get("name"), orgFilterDto.getName()));
         organizationQuery.select(organizationRoot);
+        mainPredicate = cb.conjunction();
+        mainPredicate = cb.and(mainPredicate, cb.equal(organizationRoot.get("name"), orgFilterDto.getName()));
 
-        if (orgFilterDto.getInn() != null && !orgFilterDto.getInn().isEmpty()) {
-            Predicate p = cb.equal(organizationRoot.get("inn"), orgFilterDto.getInn());
-            mainPredicate = cb.and(mainPredicate, p);
-        }
+        addPredicate(organizationRoot.get("inn"), orgFilterDto.getInn());
         organizationQuery.where(mainPredicate);
         return entityManager.createQuery(organizationQuery).getResultList();
+    }
+
+    private void addPredicate(Expression expr, String param) {
+
+        if (param != null && !param.isEmpty()) {
+            Predicate p = cb.equal(expr, param);
+            mainPredicate = cb.and(mainPredicate, p);
+        }
     }
 
     /**
@@ -100,18 +110,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
         entityManager.persist(organization);
     }
 
-    /**
-     * Обновляет данную организацию
-     *
-     * @param organization обновляемая сущность
-     * @return обновленную организацию
-     * @throws IllegalArgumentException если organization == null
-     */
-    @Override
-    public Organization update(Organization organization) {
-        Objects.requireNonNull(organization, "organization");
-        return entityManager.merge(organization);
-    }
+
 
 
 }
